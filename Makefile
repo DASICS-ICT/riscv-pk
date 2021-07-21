@@ -117,7 +117,7 @@ test: $(TEST_ELF)
 test-clean:
 	$(MAKE) clean -C $(TEST_PATH)
 
-.PHONY: test test-clean
+.PHONY: test test-clean $(TEST_ELF)
 
 #--------------------------------------------------------------------
 # Top-level rules
