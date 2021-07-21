@@ -19,8 +19,8 @@ BBL_BUILD_MAKEFILE = $(BBL_BUILD_PATH)/Makefile
 BBL_ELF_BUILD = $(BBL_BUILD_PATH)/bbl
 BBL_BIN = $(BBL_BUILD_PATH)/bbl.bin
 
-BBL_PAYLOAD = $(LINUX_ELF)
-#BBL_PAYLOAD = dummy_payload
+#BBL_PAYLOAD = $(LINUX_ELF)
+BBL_PAYLOAD = dummy_payload
 BBL_CONFIG = --host=riscv64-unknown-elf --with-payload=$(BBL_PAYLOAD) \
 						 --with-arch=rv64imac --enable-logo #--enable-print-device-tree
 
