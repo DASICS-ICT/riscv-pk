@@ -98,11 +98,11 @@ static void dasics_init()
                    (1U << DASICS_SCFG_CLS) );  // DasicsSMainCfg
 
   /**
-   * TODO: Currently we assume DASICS-smain-text lies in this fixed segment, which
-   * will be modified by smain calling sbi functions. It looks not perfect yet ...
-  */
-  #define DASICS_SMAIN_HI 0x80500000lu
-  #define DASICS_SMAIN_LO 0x80200000lu
+   * TODO: Currently we allocate the whole memory space for smain-text, which
+   * should be narrowed down by smain calling sbi functions. It looks not perfect yet ...
+   */
+  #define DASICS_SMAIN_HI 0xfffffffffffffffflu
+  #define DASICS_SMAIN_LO 0x0lu
   write_csr(0xbc1, DASICS_SMAIN_HI);
   write_csr(0xbc2, DASICS_SMAIN_LO);
 }

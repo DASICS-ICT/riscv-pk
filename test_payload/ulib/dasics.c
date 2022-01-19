@@ -61,7 +61,7 @@ uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, ui
                   "ld       ra, 88(sp)\n"\
                   "ld       s0, 80(sp)\n"\
                   "addi     sp, sp, 96\n"\
-                  "pulpret  x0,  0, x1\n"\
+                  "pulpret  x0,  0, x1\n" /* .word 0x0000f00b in little endian */ \
                   "nop");
 
     return retval;
@@ -78,7 +78,9 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void)
     uint64_t uepc = read_csr(uepc);
 
     printf("Info: ufault occurs, ucause = 0x%x, uepc = 0x%x, utval = 0x%x\n", ucause, uepc, utval);
-    write_csr(uepc, uepc + 4);
+    // write_csr(uepc, uepc + 4);
+    printf("Info: ready to shutdown the program due to ufault ...\n");
+    sys_exit();
 
     // Restore those saved registers
     write_csr(0x8a4, dasics_return_pc);
