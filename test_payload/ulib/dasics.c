@@ -78,9 +78,12 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void)
     uint64_t uepc = read_csr(uepc);
 
     printf("Info: ufault occurs, ucause = 0x%x, uepc = 0x%x, utval = 0x%x\n", ucause, uepc, utval);
-    // write_csr(uepc, uepc + 4);
+#ifndef DASICS_DEBUG
     printf("Info: ready to shutdown the program due to ufault ...\n");
     sys_exit();
+#else
+    write_csr(uepc, uepc + 4);  // For debugging
+#endif
 
     // Restore those saved registers
     write_csr(0x8a4, dasics_return_pc);

@@ -249,9 +249,12 @@ void dasics_trap(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
   printm("Info: DASICS exception occurs, mcause = 0x%x, mepc = 0x%x, mbadaddr = 0x%x ...\n",
     mcause, mepc, read_csr(mbadaddr));
-  // write_csr(mepc, mepc + 4);  // For debugging
+#ifndef DASICS_DEBUG
   printm("Info: Ready to shutdown the program due to the occuring DASICS exception ...\n");
   mcall_shutdown(0);  // Shutdown the whole program when DASICS exception occurs
+#else
+  write_csr(mepc, mepc + 4);  // For debugging
+#endif
 }
 
 static void machine_page_fault(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)

@@ -89,12 +89,10 @@ static void dump_misa(uint32_t misa) {
 
 static void dasics_init()
 {
-  #define DASICS_SCFG_GLB 2
-  #define DASICS_SCFG_ENA 1
-  #define DASICS_SCFG_CLS 0
+  #define DASICS_SCFG_ENA 0
+  #define DASICS_SCFG_CLS 2
 
-  write_csr(0xbc0, (1U << DASICS_SCFG_GLB) |
-                   (1U << DASICS_SCFG_ENA) |
+  write_csr(0xbc0, (1U << DASICS_SCFG_ENA) |
                    (1U << DASICS_SCFG_CLS) );  // DasicsSMainCfg
 
   /**

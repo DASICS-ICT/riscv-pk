@@ -125,7 +125,7 @@ static void init_pcb_stack(
 
     // set DASICS registers for user program
     extern char __UMAIN_TEXT_BEGIN__, __UMAIN_TEXT_END__;
-    pt_regs->dasicsUMainCfg         = 0x3UL;
+    pt_regs->dasicsUMainCfg         = 0xaUL;
     pt_regs->dasicsUMainBoundHi     = (ptr_t)&__UMAIN_TEXT_END__ - 0x2UL;  // point to previous instr
     pt_regs->dasicsUMainBoundLo     = (ptr_t)&__UMAIN_TEXT_BEGIN__;
 
