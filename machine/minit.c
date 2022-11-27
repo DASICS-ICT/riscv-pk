@@ -26,8 +26,8 @@ void* kernel_end;
 static void mstatus_init()
 {
   // Enable FPU
-  //if (supports_extension('D') || supports_extension('F'))
-  //  write_csr(mstatus, MSTATUS_FS);
+  if (supports_extension('D') || supports_extension('F'))
+    write_csr(mstatus, MSTATUS_FS);
 
   // Enable user/supervisor use of perf counters
   if (supports_extension('S'))
@@ -47,7 +47,7 @@ static void mstatus_init()
 static void delegate_traps()
 {
   if (!supports_extension('S'))
-    return;
+  	return;
 
   uintptr_t interrupts = MIP_SSIP | MIP_STIP | MIP_SEIP;
   uintptr_t exceptions =
@@ -56,12 +56,30 @@ static void delegate_traps()
     (1U << CAUSE_BREAKPOINT) |
     (1U << CAUSE_LOAD_PAGE_FAULT) |
     (1U << CAUSE_STORE_PAGE_FAULT) |
-    (1U << CAUSE_USER_ECALL);
+    (1U << CAUSE_USER_ECALL) |
+     /* dasics exceptions */
+    (1U << CAUSE_DASICS_UFETCH_FAULT) |
+    (1U << CAUSE_DASICS_SFETCH_FAULT) |
+    (1U << CAUSE_DASICS_ULOAD_FAULT) |
+    (1U << CAUSE_DASICS_SLOAD_FAULT) |
+    (1U << CAUSE_DASICS_USTORE_FAULT) |
+    (1U << CAUSE_DASICS_SSTORE_FAULT);
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
   assert(read_csr(mideleg) == interrupts);
   assert(read_csr(medeleg) == exceptions);
+
+  if(!supports_extension('N'))
+	return;
+
+  uintptr_t uexceptions = 
+    (1U << CAUSE_DASICS_UFETCH_FAULT) |
+    (1U << CAUSE_DASICS_ULOAD_FAULT) |
+    (1U << CAUSE_DASICS_USTORE_FAULT);
+  write_csr(sedeleg, uexceptions);
+  assert(read_csr(sedeleg) == uexceptions);
+
 }
 
 static void dump_misa(uint32_t misa) {

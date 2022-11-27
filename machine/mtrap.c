@@ -18,8 +18,27 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+static void show_regs(uintptr_t* regs)
+{
+   static char* reg_name[] = {
+	" zero"," ra  "," sp  "," gp  ",
+	" tp  "," t0  "," t1  "," t2  ",
+	" s0  "," s1  "," a0  "," a1  ",
+	" a2  "," a3  "," a4  "," a5  ",
+	" a6  "," a7  "," s2  "," s3  ",
+	" s4  "," s5  "," s6  "," s7  ",
+	" s8  "," s9  "," s10 "," s11 ",
+	" t3  "," t4  "," t5  "," t6  "};
+  for (int i = 1; i < 32; ++i) {
+	printm("%s: %p", reg_name[i], regs[i]);
+	if ((i % 3) == 0) printm("\r\n");
+  }
+  printm("\r\n");
+}
+
 void __attribute__((noreturn)) bad_trap(uintptr_t* regs, uintptr_t dummy, uintptr_t mepc)
 {
+  show_regs(regs);
   die("machine mode: unhandlable trap %d @ %p", read_csr(mcause), mepc);
 }
 
@@ -233,7 +252,7 @@ fail:
 void trap_from_machine_mode(uintptr_t* regs, uintptr_t dummy, uintptr_t mepc)
 {
   uintptr_t mcause = read_csr(mcause);
-
+ 
   switch (mcause)
   {
     case CAUSE_LOAD_PAGE_FAULT:
