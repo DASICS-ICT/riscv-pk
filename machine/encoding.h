@@ -1040,6 +1040,9 @@
 #define CAUSE_DASICS_SLOAD_FAULT   0x1b
 #define CAUSE_DASICS_USTORE_FAULT  0x1c
 #define CAUSE_DASICS_SSTORE_FAULT  0x1d
+#define CAUSE_DASICS_UECALL_FAULT  0x1e
+#define CAUSE_DASICS_SECALL_FAULT  0x1f
+
 
 #endif
 #ifdef DECLARE_INSN
@@ -1599,5 +1602,8 @@ DECLARE_CAUSE("dasics user load fault", CAUSE_DASICS_ULOAD_FAULT)
 DECLARE_CAUSE("dasics supervisor load fault", CAUSE_DASICS_SLOAD_FAULT)
 DECLARE_CAUSE("dasics user store fault", CAUSE_DASICS_USTORE_FAULT)
 DECLARE_CAUSE("dasics supervisor store fault", CAUSE_DASICS_SSTORE_FAULT)
+DECLARE_CAUSE("dasics user ecall fault", CAUSE_DASICS_UECALL_FAULT)
+DECLARE_CAUSE("dasics supervisor ecall fault", CAUSE_DASICS_SECALL_FAULT)
+
 
 #endif

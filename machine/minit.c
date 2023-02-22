@@ -63,7 +63,9 @@ static void delegate_traps()
     (1U << CAUSE_DASICS_ULOAD_FAULT) |
     (1U << CAUSE_DASICS_SLOAD_FAULT) |
     (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_SSTORE_FAULT);
+    (1U << CAUSE_DASICS_SSTORE_FAULT) |
+    (1U << CAUSE_DASICS_UECALL_FAULT) |
+    (1U << CAUSE_DASICS_SECALL_FAULT);
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
@@ -75,8 +77,9 @@ static void delegate_traps()
 
   uintptr_t uexceptions = 
     (1U << CAUSE_DASICS_UFETCH_FAULT) |
-    (1U << CAUSE_DASICS_ULOAD_FAULT) |
-    (1U << CAUSE_DASICS_USTORE_FAULT);
+    (1U << CAUSE_DASICS_ULOAD_FAULT)  |
+    (1U << CAUSE_DASICS_USTORE_FAULT) |
+    (1U << CAUSE_DASICS_UECALL_FAULT);
   write_csr(sedeleg, uexceptions);
   assert(read_csr(sedeleg) == uexceptions);
 
