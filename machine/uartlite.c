@@ -16,13 +16,6 @@ volatile uint8_t* uartlite;
 #define UART_LITE_RX_FULL    0x02
 #define UART_LITE_RX_VALID   0x01
 
-/* Ugly way to initialize uartlite */
-#define UART_LITE_MMIO 0x40600000
-void uartlite_init(void) {
-  uartlite = (void*) UART_LITE_MMIO;
-  uartlite[UART_LITE_CTRL_REG] = UART_LITE_RST_FIFO;
-}
-
 void uartlite_putchar(uint8_t ch) {
   if (ch == '\n') uartlite_putchar('\r');
 

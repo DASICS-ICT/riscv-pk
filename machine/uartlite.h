@@ -9,7 +9,4 @@ void uartlite_putchar(uint8_t ch);
 int uartlite_getchar();
 void query_uartlite(uintptr_t dtb);
 
-/* Ugly way to initialize uartlite */
-void uartlite_init(void);
-
 #endif
