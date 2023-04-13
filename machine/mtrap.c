@@ -69,6 +69,22 @@ static void send_ipi(uintptr_t recipient, int event)
   *OTHER_HLS(recipient)->ipi = 1;
 }
 
+uint32_t mcall_fdt_read(int type)
+{
+    uint32_t ret;
+    switch (type)
+    {
+        case 0: /* read time_base */
+            ret = oscourse_info.time_base;
+            break;
+        default:
+            printm("bbl read_fdt with wrong type!\n");
+            ret = -1;
+            break;
+    }
+    return ret;
+}
+
 static uintptr_t mcall_console_getchar()
 {
   if (uart) {
@@ -167,7 +183,9 @@ send_ipi:
     case SBI_SHUTDOWN:
       retval = mcall_shutdown();
       break;
-    case SBI_SET_TIMER:
+   case SBI_READFDT:
+      retval = mcall_fdt_read(arg0);
+      break;    case SBI_SET_TIMER:
 #if __riscv_xlen == 32
       retval = mcall_set_timer(arg0 + ((uint64_t)arg1 << 32));
 #else
@@ -255,6 +273,7 @@ void poweroff(uint16_t code)
     htif_poweroff();
   } else {
     // send_ipi_many(0, IPI_HALT);
+    // stop the simulation
     __asm__ volatile("mv a0, %0; .word 0x0005006b" : :"r"(code));
     while (1) { asm volatile ("wfi\n"); }
   }
