@@ -43,9 +43,5 @@ enum SBI_READY_FDT_TYPE {
     PLIC_ADDR,
     NR_IRQS
 };
-static inline uint32_t sbi_read_fdt(enum SBI_READY_FDT_TYPE type)
-{
-    return SBI_CALL_1(SBI_READFDT, (int)type);
-}
 
 #endif
