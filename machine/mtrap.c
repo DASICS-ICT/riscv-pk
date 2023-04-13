@@ -254,7 +254,8 @@ void poweroff(uint16_t code)
   if (htif) {
     htif_poweroff();
   } else {
-    send_ipi_many(0, IPI_HALT);
+    // send_ipi_many(0, IPI_HALT);
+    __asm__ volatile("mv a0, %0; .word 0x0005006b" : :"r"(code));
     while (1) { asm volatile ("wfi\n"); }
   }
 }
