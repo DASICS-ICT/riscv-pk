@@ -3,7 +3,7 @@
 #include "sys/syscall.h"
 
 void dasics_example(void) {
-    unsigned long dasicsMainCfg = read_csr(0x880);
-    printf("DasicsMainCfg: 0x%lx\n", dasicsMainCfg);
+    // unsigned long dasicsMainCfg = read_csr(0x880);
+    printf("[MAIN] Hello!\n");
     sys_exit();
 }
