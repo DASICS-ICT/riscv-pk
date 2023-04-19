@@ -46,7 +46,7 @@ int main()
 {
     // init Process Control Block
     init_pcb();
-    printk("> [INIT] PCB initialization succeeded.\n");
+    printk("> [INIT] PCB initialized.\n");
 
     // read CPU frequency
     // time_base = sbi_read_fdt(TIMEBASE);
@@ -57,11 +57,11 @@ int main()
     init_system_futex();
     // init interrupt
     init_exception();
-    printk("> [INIT] Interrupt processing initialization succeeded.\n\r");
+    printk("> [INIT] Interrupt processing initialized.\n\r");
 
     // init system call table
     init_syscall();
-    printk("> [INIT] System call initialized successfully.\n\r");
+    printk("> [INIT] Syscall initialized.\n\r");
 
     // init screen
     // init_screen();
