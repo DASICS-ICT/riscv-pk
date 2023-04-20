@@ -9,11 +9,11 @@
 			reg-names = "control";
 			clock-frequency-mhz = <500>;
 		};
-		L14: serial@60000000 {
+		L14: serial@30000000 {
 			compatible = "xilinx,uartlite";
 			//interrupt-parent = <&L1>;
 			interrupts = <3>;
-			reg = <0x0 0x40600000 0x0 0x1000>;
+			reg = <0x0 0x30000000 0x0 0x10>;
 			reg-names = "control";
 		};
     sdhci: mmc {
@@ -26,6 +26,6 @@
   };
 	L11: memory@100000000 {
 		device_type = "memory";
-		reg = <0x0 0x80000000 0x0 0x2000000>;
+		reg = <0x0 0x80000000 0x0 0x80000000>;
 	};
 };
