@@ -2,11 +2,13 @@
 #define ASSERT_H
 
 #include <kio.h>
+#include <arch/sbi.h>
 
 static inline void _panic(const char* file_name,int lineno, const char* func_name)
 {
     printk("Assertion failed at %s in %s:%d\n\r",
            func_name,file_name,lineno);
+    sbi_shutdown();
     for(;;);
 }
 
