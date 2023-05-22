@@ -56,7 +56,11 @@ static void delegate_traps()
     (1U << CAUSE_BREAKPOINT) |
     (1U << CAUSE_LOAD_PAGE_FAULT) |
     (1U << CAUSE_STORE_PAGE_FAULT) |
-    (1U << CAUSE_USER_ECALL);
+    (1U << CAUSE_USER_ECALL) |
+    (1U << CAUSE_DASICS_UINSTR_FAULT) |
+    (1U << CAUSE_DASICS_ULOAD_FAULT) |
+    (1U << CAUSE_DASICS_USTORE_FAULT) |
+    (1U << CAUSE_DASICS_UECALL_FAULT);
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);

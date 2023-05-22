@@ -6,6 +6,7 @@
 #include <kassert.h>
 #include <arch/sbi.h>
 #include <drivers/screen.h>
+#include "encoding.h"
 
 handler_t irq_table[IRQC_COUNT];
 handler_t exc_table[EXCC_COUNT];
@@ -42,6 +43,17 @@ void handle_int(regs_context_t *regs, uint64_t interrupt, uint64_t cause)
     reset_irq_timer();
 }
 
+void delegate_dasics()
+{
+    uint64_t exceptions =
+        (1U << CAUSE_DASICS_UINSTR_FAULT) |
+        (1U << CAUSE_DASICS_ULOAD_FAULT) |
+        (1U << CAUSE_DASICS_USTORE_FAULT) |
+        (1U << CAUSE_DASICS_UECALL_FAULT);
+    write_csr(sedeleg, exceptions);
+    assert(read_csr(sedeleg) == exceptions);
+}
+
 void init_exception()
 {
     for (int i = 0; i < IRQC_COUNT; ++i) {
@@ -52,6 +64,7 @@ void init_exception()
     }
     irq_table[IRQC_S_TIMER] = handle_int;
     exc_table[EXCC_SYSCALL] = handle_syscall;
+    delegate_dasics();
     setup_exception();
 }
 

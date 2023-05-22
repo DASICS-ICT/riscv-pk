@@ -21,7 +21,14 @@ SECTIONS
   PROVIDE (__etext = .);
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
+  /* DASICS lib and freezone text section */
+  .libtext         :
+  {
+    *(.ulibtext)
+  }
+  __RODATA_BEGIN__ = .;
   .rodata         : { *(.rodata .rodata.* .gnu.linkonce.r.*) }
+  __RODATA_END__ = .;
   .rodata1        : { *(.rodata1) }
   .sdata2         :
   {
