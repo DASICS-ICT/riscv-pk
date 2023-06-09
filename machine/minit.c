@@ -57,15 +57,31 @@ static void delegate_traps()
     (1U << CAUSE_LOAD_PAGE_FAULT) |
     (1U << CAUSE_STORE_PAGE_FAULT) |
     (1U << CAUSE_USER_ECALL) |
+    /* dasics exceptions */
     (1U << CAUSE_DASICS_UINSTR_FAULT) |
+    (1U << CAUSE_DASICS_SINSTR_FAULT) |
     (1U << CAUSE_DASICS_ULOAD_FAULT) |
+    (1U << CAUSE_DASICS_SLOAD_FAULT) |
     (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_UECALL_FAULT);
+    (1U << CAUSE_DASICS_SSTORE_FAULT) |
+    (1U << CAUSE_DASICS_UECALL_FAULT) |
+    (1U << CAUSE_DASICS_SECALL_FAULT);
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
   assert(read_csr(mideleg) == interrupts);
   assert(read_csr(medeleg) == exceptions);
+
+  // if(!supports_extension('N'))
+	//   return;
+
+  // uintptr_t uexceptions = 
+  //   (1U << CAUSE_DASICS_UFETCH_FAULT) |
+  //   (1U << CAUSE_DASICS_ULOAD_FAULT)  |
+  //   (1U << CAUSE_DASICS_USTORE_FAULT) |
+  //   (1U << CAUSE_DASICS_UECALL_FAULT);
+  // write_csr(sedeleg, uexceptions);
+  // assert(read_csr(sedeleg) == uexceptions);
 }
 
 static void dump_misa(uint32_t misa) {
@@ -75,6 +91,24 @@ static void dump_misa(uint32_t misa) {
     misa >>= 1;
   }
   printm("\n");
+}
+
+static void dasics_init()
+{
+  #define DASICS_SCFG_ENA 0
+  #define DASICS_SCFG_CLS 2
+
+  write_csr(0xbc0, (1U << DASICS_SCFG_ENA) |
+                   (1U << DASICS_SCFG_CLS) );  // DasicsSMainCfg
+
+  /**
+   * TODO: Currently we allocate the whole memory space for smain-text, which
+   * should be narrowed down by smain calling sbi functions. It looks not perfect yet ...
+   */
+  #define DASICS_SMAIN_HI 0xfffffffffffffffflu
+  #define DASICS_SMAIN_LO 0x0lu
+  write_csr(0xbc3, DASICS_SMAIN_HI);
+  write_csr(0xbc2, DASICS_SMAIN_LO);
 }
 
 static void fp_init()
@@ -111,6 +145,7 @@ static void memory_init()
 static void hart_init()
 {
   mstatus_init();
+  dasics_init();
   //fp_init();
 #ifndef BBL_BOOT_MACHINE
   delegate_traps();

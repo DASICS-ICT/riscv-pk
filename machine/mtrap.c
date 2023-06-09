@@ -134,6 +134,25 @@ static void send_ipi_many(uintptr_t* pmask, int event)
   }
 }
 
+static uintptr_t mcall_modify_smain_bound(uintptr_t mepc, uint64_t newhi, uint64_t newlo)
+{
+  uintptr_t oldhi = read_csr(0xbc3);
+  uintptr_t oldlo = read_csr(0xbc2);
+
+  if (mepc >= oldlo && mepc <= oldhi)
+  {
+    write_csr(0xbc3, newhi);
+    write_csr(0xbc2, newlo);
+    return 0;
+  }
+  else
+  {
+    printm("warning: mepc 0x%lx is not within smain bound (0x%lx ~ 0x%lx), thus has no permission to modify ...\n",
+      mepc, oldlo, oldhi);
+    return -ENOSYS;
+  }
+}
+
 void mcall_trap(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
   write_csr(mepc, mepc + 4);
@@ -174,6 +193,9 @@ send_ipi:
       retval = mcall_set_timer(arg0);
 #endif
       break;
+    case SBI_MODIFY_SMAIN_BOUND:
+      retval = mcall_modify_smain_bound(mepc, arg0, arg1);
+      break;
     default:
       retval = -ENOSYS;
       break;
@@ -202,6 +224,18 @@ void redirect_trap(uintptr_t epc, uintptr_t mstatus, uintptr_t badaddr)
 void pmp_trap(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
   redirect_trap(mepc, read_csr(mstatus), read_csr(mbadaddr));
+}
+
+void dasics_trap(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
+{
+  printm("Info: DASICS exception occurs, mcause = 0x%x, mepc = 0x%x, mbadaddr = 0x%x ...\n",
+    mcause, mepc, read_csr(mbadaddr));
+#ifndef DASICS_DEBUG
+  printm("Info: Ready to shutdown the program due to the occuring DASICS exception ...\n");
+  mcall_shutdown(0);  // Shutdown the whole program when DASICS exception occurs
+#else
+  write_csr(mepc, mepc + 4);  // For debugging
+#endif
 }
 
 static void machine_page_fault(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
