@@ -143,8 +143,15 @@ _save_context:
   sd   s0, OFFSET_REG_DLBOUND14HI(sp)
   csrr s0, CSR_DLBOUND15LO
   sd   s0, OFFSET_REG_DLBOUND15LO(sp)
-  csrr s0, CSR_DLBOUND15HI
+  csrr s0, CSR_DLBOUND15HI 
   sd   s0, OFFSET_REG_DLBOUND15HI(sp)
+
+  csrr s0, CSR_DMAINCALL
+  sd   s0, OFFSET_REG_DMAINCALL(sp)
+  csrr s0, CSR_DRETURNPC
+  sd   s0, OFFSET_REG_DRETURNPC(sp)
+  csrr s0, CSR_DFZRETURN
+  sd   s0, OFFSET_REG_DFZRETURN(sp)
 
   /*
    * Disable user-mode memory access as it should only be set in the
@@ -265,6 +272,13 @@ _save_context:
   csrw CSR_DLBOUND15LO, s0
   ld   s0, OFFSET_REG_DLBOUND15HI(sp)
   csrw CSR_DLBOUND15HI, s0
+
+  ld   s0, OFFSET_REG_DMAINCALL(sp)
+  csrw CSR_DMAINCALL, s0
+  ld   s0, OFFSET_REG_DRETURNPC(sp)
+  csrw CSR_DRETURNPC, s0
+  ld   s0, OFFSET_REG_DFZRETURN(sp)
+  csrw CSR_DFZRETURN, s0
 
   ld x1,  OFFSET_REG_RA(sp)
   ld x3,  OFFSET_REG_GP(sp)

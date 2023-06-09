@@ -137,12 +137,18 @@
 #define OFFSET_REG_DLBOUND15LO  632
 #define OFFSET_REG_DLBOUND15HI  640
 
+#define OFFSET_REG_DMAINCALL    648
+#define OFFSET_REG_DRETURNPC    656
+#define OFFSET_REG_DFZRETURN    664
+
 /* Size of stack frame, word/double word alignment */
 #define OFFSET_SIZE             648
 
 #define PCB_KERNEL_SP          0
 #define PCB_USER_SP            8
 #define PCB_PREEMPT_COUNT      16
+#define PCB_KERNEL_STACK_BASE  24
+#define PCB_USER_STACK_BASE    32
 
 /* offset in switch_to */
 #define SWITCH_TO_RA     0

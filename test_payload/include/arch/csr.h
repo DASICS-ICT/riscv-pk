@@ -126,4 +126,8 @@
 #define CSR_DLBOUND15LO     0x8ae
 #define CSR_DLBOUND15HI     0x8af
 
+#define CSR_DMAINCALL       0x8b0
+#define CSR_DRETURNPC       0x8b1
+#define CSR_DFZRETURN       0x8b2
+
 #endif /* CSR_H */
