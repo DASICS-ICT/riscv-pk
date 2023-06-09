@@ -17,14 +17,14 @@ void port_write(char *str)
 #include <os/sched.h>
 #include <os/irq.h>
 
-static unsigned int mini_strlen(const char *s)
+static unsigned int ATTR_SFREEZONE_TEXT mini_strlen(const char *s)
 {
     unsigned int len = 0;
     while (s[len] != '\0') len++;
     return len;
 }
 
-static unsigned int mini_itoa(
+static unsigned int ATTR_SFREEZONE_TEXT mini_itoa(
     long value, unsigned int radix, unsigned int uppercase,
     unsigned int unsig, char *buffer, unsigned int zero_pad)
 {
@@ -74,7 +74,7 @@ struct mini_buff
     unsigned int buffer_len;
 };
 
-static int _putc(int ch, struct mini_buff *b)
+static int ATTR_SFREEZONE_TEXT _putc(int ch, struct mini_buff *b)
 {
     if ((unsigned int)((b->pbuffer - b->buffer) + 1) >=
         b->buffer_len)
@@ -84,7 +84,7 @@ static int _putc(int ch, struct mini_buff *b)
     return 1;
 }
 
-static int _puts(char *s, unsigned int len, struct mini_buff *b)
+static int ATTR_SFREEZONE_TEXT _puts(char *s, unsigned int len, struct mini_buff *b)
 {
     unsigned int i;
 
@@ -98,7 +98,7 @@ static int _puts(char *s, unsigned int len, struct mini_buff *b)
     return len;
 }
 
-static int mini_vsnprintf(
+static int ATTR_SFREEZONE_TEXT mini_vsnprintf(
     char *buffer, unsigned int buffer_len, const char *fmt,
     va_list va)
 {
@@ -188,7 +188,7 @@ end:
     return b.pbuffer - b.buffer;
 }
 
-int vprintk(const char *fmt, va_list _va)
+int ATTR_SFREEZONE_TEXT vprintk(const char *fmt, va_list _va)
 {
     va_list va;
     va_copy(va, _va);
@@ -200,8 +200,8 @@ int vprintk(const char *fmt, va_list _va)
 
     buff[ret] = '\0';
 
-    disable_preempt();
-    port_write(buff);
+    dasics_smaincall(SMAINCALL_DISABLE_PREEMPT, 0, 0, 0);
+    dasics_smaincall(SMAINCALL_WRITE, (uint64_t)buff, 0, 0);
     /*
     for (int i = 0; i < ret; ++i) {
         if (buff[i] == '\n') {
@@ -213,12 +213,12 @@ int vprintk(const char *fmt, va_list _va)
         }
     }
     */
-    enable_preempt();
+    dasics_smaincall(SMAINCALL_ENABLE_PREEMPT, 0, 0, 0);
 
     return ret;
 }
 
-int printk(const char *fmt, ...)
+int ATTR_SFREEZONE_TEXT printk(const char *fmt, ...)
 {
     int ret = 0;
     va_list va;

@@ -27,7 +27,7 @@ ENTRY(_start)
   .option pop
 
   /* Clear BSS for flat non-ELF images */
-  /*
+
   la a3, __bss_start
   la a4, __BSS_END__
   ble a4, a3, clear_bss_done
@@ -36,7 +36,6 @@ clear_bss:
   add a3, a3, RISCV_SZPTR
   blt a3, a4, clear_bss
 clear_bss_done:
-  */
 
   /* setup C environment */
   la tp, pid0_pcb

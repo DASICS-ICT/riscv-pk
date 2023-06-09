@@ -19,7 +19,7 @@ INCLUDE_FLAG = \
   -Iulib/include \
   -I../machine \
 
-CFLAGS = -O0 -fno-builtin -nostdlib -T $(LDSCRIPT) -Wall -mcmodel=medany $(INCLUDE_FLAG) -nostdinc -g -fvar-tracking
+CFLAGS = -O0 -fno-builtin -march=rv64g -nostdlib -T $(LDSCRIPT) -Wall -mcmodel=medany $(INCLUDE_FLAG) -nostdinc -g -fvar-tracking
 
 
 default: $(ELF)
