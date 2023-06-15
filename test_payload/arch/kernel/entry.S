@@ -78,8 +78,6 @@ _save_context:
 
   csrr s0, CSR_DLCFG0
   sd   s0, OFFSET_REG_DLCFG0(sp)
-  csrr s0, CSR_DLCFG1
-  sd   s0, OFFSET_REG_DLCFG1(sp)
 
   csrr s0, CSR_DLBOUND0LO
   sd   s0, OFFSET_REG_DLBOUND0LO(sp)
@@ -153,6 +151,26 @@ _save_context:
   csrr s0, CSR_DFZRETURN
   sd   s0, OFFSET_REG_DFZRETURN(sp)
 
+  csrr s0, CSR_DJBOUND0LO
+  sd   s0, OFFSET_REG_DJBOUND0LO(sp)
+  csrr s0, CSR_DJBOUND0HI
+  sd   s0, OFFSET_REG_DJBOUND0HI(sp)
+  csrr s0, CSR_DJBOUND1LO
+  sd   s0, OFFSET_REG_DJBOUND1LO(sp)
+  csrr s0, CSR_DJBOUND1HI
+  sd   s0, OFFSET_REG_DJBOUND1HI(sp)
+  csrr s0, CSR_DJBOUND2LO
+  sd   s0, OFFSET_REG_DJBOUND2LO(sp)
+  csrr s0, CSR_DJBOUND2HI
+  sd   s0, OFFSET_REG_DJBOUND2HI(sp)
+  csrr s0, CSR_DJBOUND3LO
+  sd   s0, OFFSET_REG_DJBOUND3LO(sp)
+  csrr s0, CSR_DJBOUND3HI
+  sd   s0, OFFSET_REG_DJBOUND3HI(sp)
+
+  csrr s0, CSR_DJCFG
+  sd   s0, OFFSET_REG_DJCFG(sp)
+
   /*
    * Disable user-mode memory access as it should only be set in the
    * actual user copy routines.
@@ -207,6 +225,9 @@ _save_context:
   csrw CSR_DUMBOUNDLO, s0
   ld   s0, OFFSET_REG_DUMBOUNDHI(sp)
   csrw CSR_DUMBOUNDHI, s0
+
+  ld   s0, OFFSET_REG_DLCFG0(sp)
+  csrw CSR_DLCFG0, s0
 
   ld   s0, OFFSET_REG_DLBOUND0LO(sp)
   csrw CSR_DLBOUND0LO, s0
@@ -279,6 +300,26 @@ _save_context:
   csrw CSR_DRETURNPC, s0
   ld   s0, OFFSET_REG_DFZRETURN(sp)
   csrw CSR_DFZRETURN, s0
+
+  ld   s0, OFFSET_REG_DJBOUND0LO(sp)
+  csrw CSR_DJBOUND0LO, s0
+  ld   s0, OFFSET_REG_DJBOUND0HI(sp)
+  csrw CSR_DJBOUND0HI, s0
+  ld   s0, OFFSET_REG_DJBOUND1LO(sp)
+  csrw CSR_DJBOUND1LO, s0
+  ld   s0, OFFSET_REG_DJBOUND1HI(sp)
+  csrw CSR_DJBOUND1HI, s0
+  ld   s0, OFFSET_REG_DJBOUND2LO(sp)
+  csrw CSR_DJBOUND2LO, s0
+  ld   s0, OFFSET_REG_DJBOUND2HI(sp)
+  csrw CSR_DJBOUND2HI, s0
+  ld   s0, OFFSET_REG_DJBOUND3LO(sp)
+  csrw CSR_DJBOUND3LO, s0
+  ld   s0, OFFSET_REG_DJBOUND3HI(sp)
+  csrw CSR_DJBOUND3HI, s0
+
+  ld   s0, OFFSET_REG_DJCFG(sp)
+  csrw CSR_DJCFG, s0
 
   ld x1,  OFFSET_REG_RA(sp)
   ld x3,  OFFSET_REG_GP(sp)

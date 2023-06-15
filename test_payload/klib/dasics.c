@@ -69,110 +69,93 @@ uint64_t ATTR_SMAIN_TEXT dasics_smaincall(SmaincallTypes type, uint64_t arg0, ui
     return retval;
 }
 
-int32_t ATTR_SMAIN_TEXT dasics_libcfg_kalloc(uint64_t cfg, uint64_t hi, uint64_t lo)
+int32_t ATTR_SMAIN_TEXT dasics_libcfg_kalloc(uint64_t cfg, uint64_t lo, uint64_t hi)
 {
     uint64_t libcfg0 = kread_csr(0x880);  // DasicsLibCfg0
-    uint64_t libcfg1 = kread_csr(0x881);  // DasicsLibCfg1
 
     //printk("[dasics_kallock] libcfg0: 0x%lx libcfg1: 0x%lx\n",libcfg0,libcfg1);
 
-    int32_t max_cfgs = DASICS_LIBCFG_WIDTH << 1;
-#ifndef RV32
-    int32_t step = 8;  // rv64
-#else
-    int32_t step = 4;  // rv32
-#endif
+    int32_t max_cfgs = DASICS_LIBCFG_WIDTH;
+    int32_t step = 4;
 
     for (int32_t idx = 0; idx < max_cfgs; ++idx)
     {
-        int choose_libcfg0 = (idx < DASICS_LIBCFG_WIDTH);
-        int32_t _idx = choose_libcfg0 ? idx : idx - DASICS_LIBCFG_WIDTH;
-        uint64_t curr_cfg = ((choose_libcfg0 ? libcfg0 : libcfg1) >> (_idx * step)) & DASICS_LIBCFG_MASK;
+        uint64_t curr_cfg = (libcfg0 >> (idx * step)) & DASICS_LIBCFG_MASK;
 
         if ((curr_cfg & DASICS_LIBCFG_V) == 0)  // Find avaliable cfg
         {
-            if (choose_libcfg0)
-            {
-                libcfg0 &= ~(DASICS_LIBCFG_MASK << (_idx * step));
-                libcfg0 |= (cfg & DASICS_LIBCFG_MASK) << (_idx * step);
-                kwrite_csr(0x880, libcfg0);  // DasicsLibCfg0
-            }
-            else
-            {
-                libcfg1 &= ~(DASICS_LIBCFG_MASK << (_idx * step));
-                libcfg1 |= (cfg & DASICS_LIBCFG_MASK) << (_idx * step);
-                kwrite_csr(0x881, libcfg1);  // DasicsLibCfg1
-            }
-
             // Write DASICS boundary csrs
             switch (idx)
             {
                 case 0:
-                    kwrite_csr(0x891, hi);  // DasicsLibBound0
-                    kwrite_csr(0x890, lo);  // DasicsLibBound1
+                    kwrite_csr(0x890, lo);  // DasicsLibBound0Lo
+                    kwrite_csr(0x891, hi);  // DasicsLibBound0Hi
                     break;
                 case 1:
-                    kwrite_csr(0x893, hi);  // DasicsLibBound2
-                    kwrite_csr(0x892, lo);  // DasicsLibBound3
+                    kwrite_csr(0x892, lo);  // DasicsLibBound1Lo
+                    kwrite_csr(0x893, hi);  // DasicsLibBound1Hi
                     break;
                 case 2:
-                    kwrite_csr(0x895, hi);  // DasicsLibBound4
-                    kwrite_csr(0x894, lo);  // DasicsLibBound5
+                    kwrite_csr(0x894, lo);  // DasicsLibBound2Lo
+                    kwrite_csr(0x895, hi);  // DasicsLibBound2Hi
                     break;
                 case 3:
-                    kwrite_csr(0x897, hi);  // DasicsLibBound6
-                    kwrite_csr(0x896, lo);  // DasicsLibBound7
+                    kwrite_csr(0x896, lo);  // DasicsLibBound3Lo
+                    kwrite_csr(0x897, hi);  // DasicsLibBound3Hi
                     break;
                 case 4:
-                    kwrite_csr(0x899, hi);  // DasicsLibBound8
-                    kwrite_csr(0x898, lo);  // DasicsLibBound9
+                    kwrite_csr(0x898, lo);  // DasicsLibBound4Lo
+                    kwrite_csr(0x899, hi);  // DasicsLibBound4Hi
                     break;
                 case 5:
-                    kwrite_csr(0x89b, hi);  // DasicsLibBound10
-                    kwrite_csr(0x89a, lo);  // DasicsLibBound11
+                    kwrite_csr(0x89a, lo);  // DasicsLibBound5Lo
+                    kwrite_csr(0x89b, hi);  // DasicsLibBound5Hi
                     break;
                 case 6:
-                    kwrite_csr(0x89d, hi);  // DasicsLibBound12
-                    kwrite_csr(0x89c, lo);  // DasicsLibBound13
+                    kwrite_csr(0x89c, lo);  // DasicsLibBound6Lo
+                    kwrite_csr(0x89d, hi);  // DasicsLibBound6Hi
                     break;
                 case 7:
-                    kwrite_csr(0x89f, hi);  // DasicsLibBound14
-                    kwrite_csr(0x89e, lo);  // DasicsLibBound15
+                    kwrite_csr(0x89e, lo);  // DasicsLibBound7Lo
+                    kwrite_csr(0x89f, hi);  // DasicsLibBound7Hi
                     break;
                 case 8:
-                    kwrite_csr(0x8a1, hi);  // DasicsLibBound16
-                    kwrite_csr(0x8a0, lo);  // DasicsLibBound17
+                    kwrite_csr(0x8a0, lo);  // DasicsLibBound8Lo
+                    kwrite_csr(0x8a1, hi);  // DasicsLibBound8Hi
                     break;
                 case 9:
-                    kwrite_csr(0x8a3, hi);  // DasicsLibBound18
-                    kwrite_csr(0x8a2, lo);  // DasicsLibBound19
+                    kwrite_csr(0x8a2, lo);  // DasicsLibBound9Lo
+                    kwrite_csr(0x8a3, hi);  // DasicsLibBound9Hi
                     break;
                 case 10:
-                    kwrite_csr(0x8a5, hi);  // DasicsLibBound20
-                    kwrite_csr(0x8a4, lo);  // DasicsLibBound21
+                    kwrite_csr(0x8a4, lo);  // DasicsLibBound10Lo
+                    kwrite_csr(0x8a5, hi);  // DasicsLibBound10Hi
                     break;
                 case 11:
-                    kwrite_csr(0x8a7, hi);  // DasicsLibBound22
-                    kwrite_csr(0x8a6, lo);  // DasicsLibBound23
+                    kwrite_csr(0x8a6, lo);  // DasicsLibBound11Lo
+                    kwrite_csr(0x8a7, hi);  // DasicsLibBound11Hi
                     break;
                 case 12:
-                    kwrite_csr(0x8a9, hi);  // DasicsLibBound24
-                    kwrite_csr(0x8a8, lo);  // DasicsLibBound25
+                    kwrite_csr(0x8a8, lo);  // DasicsLibBound12Lo
+                    kwrite_csr(0x8a9, hi);  // DasicsLibBound12Hi
                     break;
                 case 13:
-                    kwrite_csr(0x8ab, hi);  // DasicsLibBound26
-                    kwrite_csr(0x8aa, lo);  // DasicsLibBound27
+                    kwrite_csr(0x8aa, lo);  // DasicsLibBound13Lo
+                    kwrite_csr(0x8ab, hi);  // DasicsLibBound13Hi
                     break;
                 case 14:
-                    kwrite_csr(0x8ad, hi);  // DasicsLibBound28
-                    kwrite_csr(0x8ac, lo);  // DasicsLibBound29
+                    kwrite_csr(0x8ac, lo);  // DasicsLibBound14Lo
+                    kwrite_csr(0x8ad, hi);  // DasicsLibBound14Hi
                     break;
                 default:
-                    kwrite_csr(0x8af, hi);  // DasicsLibBound30
-                    kwrite_csr(0x8ae, lo);  // DasicsLibBound31
+                    kwrite_csr(0x8ae, lo);  // DasicsLibBound15Lo
+                    kwrite_csr(0x8af, hi);  // DasicsLibBound15Hi
                     break;
             }
 
+            libcfg0 &= ~(DASICS_LIBCFG_MASK << (idx * step));
+            libcfg0 |= (cfg & DASICS_LIBCFG_MASK) << (idx * step);
+            kwrite_csr(0x880, libcfg0);  // DasicsLibCfg0
             return idx;
         }
     }
@@ -182,54 +165,97 @@ int32_t ATTR_SMAIN_TEXT dasics_libcfg_kalloc(uint64_t cfg, uint64_t hi, uint64_t
 
 int32_t ATTR_SMAIN_TEXT dasics_libcfg_kfree(int32_t idx)
 {
-    if (idx < 0 || idx >= (DASICS_LIBCFG_WIDTH << 1))
+    if (idx < 0 || idx >= DASICS_LIBCFG_WIDTH)
     {
         return -1;
     }
 
-#ifndef RV32
-    int32_t step = 8;  // rv64
-#else
-    int32_t step = 4;  // rv32
-#endif
+    int32_t step = 4;
 
-    int choose_libcfg0 = (idx < DASICS_LIBCFG_WIDTH);
-    int32_t _idx = choose_libcfg0 ? idx : idx - DASICS_LIBCFG_WIDTH;
+    uint64_t libcfg = kread_csr(0x880);  // DasicsLibCfg0
+    libcfg &= ~(DASICS_LIBCFG_V << (idx * step));
 
-    uint64_t libcfg = choose_libcfg0 ? kread_csr(0x880):  // DasicsLibCfg0
-                                       kread_csr(0x881);  // DasicsLibCfg1
-    libcfg &= ~(DASICS_LIBCFG_V << (_idx * step));
-
-    if (choose_libcfg0)
-    {
-        kwrite_csr(0x880, libcfg);  // DasicsLibCfg0
-    }
-    else
-    {
-        kwrite_csr(0x881, libcfg);  // DasicsLibCfg1
-    }
+    kwrite_csr(0x880, libcfg);  // DasicsLibCfg0
 
     return 0;
 }
 
 uint32_t dasics_libcfg_kget(int32_t idx)
 {
-    if (idx < 0 || idx >= (DASICS_LIBCFG_WIDTH << 1))
+    if (idx < 0 || idx >= DASICS_LIBCFG_WIDTH)
     {
         return -1;
     }
 
-#ifndef RV32
-    int32_t step = 8;  // rv64
-#else
-    int32_t step = 4;  // rv32
-#endif
+    int32_t step = 4;
 
-    int choose_libcfg0 = (idx < DASICS_LIBCFG_WIDTH);
-    int32_t _idx = choose_libcfg0 ? idx : idx - DASICS_LIBCFG_WIDTH;
+    uint64_t libcfg = kread_csr(0x880);  // DasicsLibCfg0
 
-    uint64_t libcfg = choose_libcfg0 ? kread_csr(0x880):  // DasicsLibCfg0
-                                       kread_csr(0x881);  // DasicsLibCfg1
+    return (libcfg >> (idx * step)) & DASICS_LIBCFG_MASK;
+}
 
-    return (libcfg >> (_idx * step)) & DASICS_LIBCFG_MASK;
+int32_t ATTR_SMAIN_TEXT dasics_jumpcfg_kalloc(uint64_t lo, uint64_t hi)
+{
+    uint64_t jumpcfg = kread_csr(0x8c8);    // DasicsJumpCfg
+    int32_t max_cfgs = DASICS_JUMPCFG_WIDTH;
+    int32_t step = 16;
+
+    for (int32_t idx = 0; idx < max_cfgs; ++idx) {
+        uint64_t curr_cfg = (jumpcfg >> (idx * step)) & DASICS_JUMPCFG_MASK;
+        if ((curr_cfg & DASICS_JUMPCFG_V) == 0) // found available cfg
+        {
+            // Write DASICS jump boundary CSRs
+            switch (idx) {
+                case 0:
+                    kwrite_csr(0x8c0, lo);  // DasicsJumpBound0Lo
+                    kwrite_csr(0x8c1, hi);  // DasicsJumpBound0Hi
+                    break;
+                case 1:
+                    kwrite_csr(0x8c2, lo);  // DasicsJumpBound1Lo
+                    kwrite_csr(0x8c3, hi);  // DasicsJumpBound1Hi
+                    break;
+                case 2:
+                    kwrite_csr(0x8c4, lo);  // DasicsJumpBound2Lo
+                    kwrite_csr(0x8c5, hi);  // DasicsJumpBound2Hi
+                    break;
+                case 3:
+                    kwrite_csr(0x8c6, lo);  // DasicsJumpBound3Lo
+                    kwrite_csr(0x8c7, hi);  // DasicsJumpBound3Hi
+                    break;
+                default:
+                    break;
+            }
+
+            jumpcfg &= ~(DASICS_JUMPCFG_MASK << (idx * step));
+            jumpcfg |= DASICS_JUMPCFG_V << (idx * step);
+            kwrite_csr(0x8c8, jumpcfg); // DasicsJumpCfg
+
+            return idx;
+        }
+    }
+
+    return -1;
+}
+
+int32_t ATTR_SMAIN_TEXT dasics_jumpcfg_kfree(int32_t idx) {
+    if (idx < 0 || idx >= DASICS_JUMPCFG_WIDTH) {
+        return -1;
+    }
+
+    int32_t step = 16;
+    uint64_t jumpcfg = kread_csr(0x8c8);    // DasicsJumpCfg
+    jumpcfg &= ~(DASICS_JUMPCFG_V << (idx * step));
+    kwrite_csr(0x8c8, jumpcfg); // DasicsJumpCfg
+    return 0;
+}
+
+uint32_t dasics_jumpcfg_get(int32_t idx) {
+    if (idx < 0 || idx >= DASICS_JUMPCFG_WIDTH) {
+        return -1;
+    }
+
+    int32_t step = 16;
+    uint64_t jumpcfg = kread_csr(0x8c8);    // DasicsJumpCfg
+
+    return (jumpcfg >> (idx * step)) & DASICS_JUMPCFG_MASK;
 }

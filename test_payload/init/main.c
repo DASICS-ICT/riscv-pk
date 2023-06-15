@@ -69,23 +69,23 @@ static void init_syscall(void)
 static void init_dasics(void)
 {
     extern char _ftext, _etext;
-    assert(0 == sbi_modify_smain_bound((ptr_t)&_etext - 0x2UL, (ptr_t)&_ftext));
+    assert(0 == sbi_modify_smain_bound((ptr_t)&_ftext, (ptr_t)&_etext));
 
     // Init dasicsLibCfg for supervisor lib functions, like printk, kstring and screen drivers et.al
     extern char __RODATA_BEGIN__, __RODATA_END__;
     assert(dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R,
-                (ptr_t)&__RODATA_END__, (ptr_t)&__RODATA_BEGIN__) == 0);  // rodata section
+                (ptr_t)&__RODATA_BEGIN__, (ptr_t)&__RODATA_END__) == 0);  // rodata section
 
     extern char __SFREEZONE_TEXT_BEGIN__, __SFREEZONE_TEXT_END__;
-    assert(dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_X,
-                (ptr_t)&__SFREEZONE_TEXT_END__ - 0x2UL, (ptr_t)&__SFREEZONE_TEXT_BEGIN__) == 1);  // freezone text
+    assert(dasics_jumpcfg_kalloc(
+        (ptr_t)&__SFREEZONE_TEXT_BEGIN__, (ptr_t)&__SFREEZONE_TEXT_END__) == 0);    // freezone text
 
     extern char __SFREEZONE_DATA_BEGIN__, __SFREEZONE_DATA_END__;
     assert(dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W,
-                (ptr_t)&__SFREEZONE_DATA_END__, (ptr_t)&__SFREEZONE_DATA_BEGIN__) == 2);  // freezone data
+                (ptr_t)&__SFREEZONE_DATA_BEGIN__, (ptr_t)&__SFREEZONE_DATA_END__) == 1);  // freezone data
 
     assert(dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W,
-                (ptr_t)(INIT_KERNEL_STACK + PAGE_SIZE), (ptr_t)INIT_KERNEL_STACK) == 3);  // stack space for the pid0 process
+                (ptr_t)INIT_KERNEL_STACK, (ptr_t)(INIT_KERNEL_STACK + PAGE_SIZE)) == 2);  // stack space for the pid0 process
 
     dasics_init_smaincall((ptr_t)&dasics_smaincall);
 
@@ -132,9 +132,9 @@ int main()
     // reset_irq_timer();
     
     // DASICS MODES TEST
-    int idx0 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R                  , (ptr_t)(pub_readonly + 100), (ptr_t)pub_readonly);
-    int idx1 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (ptr_t)(pub_rwbuffer + 100), (ptr_t)pub_rwbuffer);
-    int idx2 = dasics_libcfg_kalloc(DASICS_LIBCFG_V                                    , (ptr_t)(      secret + 100), (ptr_t)secret);
+    int idx0 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R                  , (ptr_t)pub_readonly, (ptr_t)(pub_readonly) + 100);
+    int idx1 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (ptr_t)pub_rwbuffer, (ptr_t)(pub_rwbuffer + 100));
+    int idx2 = dasics_libcfg_kalloc(DASICS_LIBCFG_V                                    , (ptr_t)secret, (ptr_t)(secret + 100));
 
     printk("> [SMAIN] Start Slib test...\n\r");
 

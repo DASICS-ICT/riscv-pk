@@ -64,8 +64,13 @@ typedef struct regs_context
 
     /* Saved DASICS user registers */
     reg_t dasicsLibCfg0;
-    reg_t dasicsLibCfg1;
+    reg_t dasicsLibCfg1;    // reserved
     reg_t dasicsLibBounds[16][2];
+    reg_t dasicsMaincall;
+    reg_t dasicsReturnPC;
+    reg_t dasicsFreezoneRet;
+    reg_t dasicsJumpBounds[4][2];
+    reg_t dasicsJumpCfg;
 } regs_context_t;
 
 /* used to save register infomation in switch_to */

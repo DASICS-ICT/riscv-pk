@@ -91,7 +91,6 @@
 #define CSR_DUMBOUNDHI      0x9e3
 
 #define CSR_DLCFG0          0x880
-#define CSR_DLCFG1          0x881
 
 #define CSR_DLBOUND0LO      0x890
 #define CSR_DLBOUND0HI      0x891
@@ -129,5 +128,15 @@
 #define CSR_DMAINCALL       0x8b0
 #define CSR_DRETURNPC       0x8b1
 #define CSR_DFZRETURN       0x8b2
+
+#define CSR_DJBOUND0LO      0x8c0
+#define CSR_DJBOUND0HI      0x8c1
+#define CSR_DJBOUND1LO      0x8c2
+#define CSR_DJBOUND1HI      0x8c3
+#define CSR_DJBOUND2LO      0x8c4
+#define CSR_DJBOUND2HI      0x8c5
+#define CSR_DJBOUND3LO      0x8c6
+#define CSR_DJBOUND3HI      0x8c7
+#define CSR_DJCFG           0x8c8
 
 #endif /* CSR_H */

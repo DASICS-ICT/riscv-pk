@@ -60,9 +60,9 @@ static inline void sbi_shutdown()
 }
 
 // DASICS SBI to modify smain bound csrs
-static inline int32_t sbi_modify_smain_bound(uint64_t newhi, uint64_t newlo)
+static inline int32_t sbi_modify_smain_bound(uint64_t newlo, uint64_t newhi)
 {
-    return SBI_CALL_2(SBI_MODIFY_SMAIN_BOUND, newhi, newlo);
+    return SBI_CALL_2(SBI_MODIFY_SMAIN_BOUND, newlo, newhi);
 }
 
 #endif

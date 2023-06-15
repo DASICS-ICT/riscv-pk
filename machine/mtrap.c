@@ -134,15 +134,15 @@ static void send_ipi_many(uintptr_t* pmask, int event)
   }
 }
 
-static uintptr_t mcall_modify_smain_bound(uintptr_t mepc, uint64_t newhi, uint64_t newlo)
+static uintptr_t mcall_modify_smain_bound(uintptr_t mepc, uint64_t newlo, uint64_t newhi)
 {
-  uintptr_t oldhi = read_csr(0xbc3);
   uintptr_t oldlo = read_csr(0xbc2);
+  uintptr_t oldhi = read_csr(0xbc3);
 
-  if (mepc >= oldlo && mepc <= oldhi)
+  if (mepc >= oldlo && mepc < oldhi)
   {
-    write_csr(0xbc3, newhi);
     write_csr(0xbc2, newlo);
+    write_csr(0xbc3, newhi);
     return 0;
   }
   else

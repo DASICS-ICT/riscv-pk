@@ -141,8 +141,19 @@
 #define OFFSET_REG_DRETURNPC    656
 #define OFFSET_REG_DFZRETURN    664
 
+#define OFFSET_REG_DJBOUND0LO   672
+#define OFFSET_REG_DJBOUND0HI   680
+#define OFFSET_REG_DJBOUND1LO   688
+#define OFFSET_REG_DJBOUND1HI   696
+#define OFFSET_REG_DJBOUND2LO   704
+#define OFFSET_REG_DJBOUND2HI   712
+#define OFFSET_REG_DJBOUND3LO   720
+#define OFFSET_REG_DJBOUND3HI   728
+
+#define OFFSET_REG_DJCFG        736
+
 /* Size of stack frame, word/double word alignment */
-#define OFFSET_SIZE             648
+#define OFFSET_SIZE             744
 
 #define PCB_KERNEL_SP          0
 #define PCB_USER_SP            8
