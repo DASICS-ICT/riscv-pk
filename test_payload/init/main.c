@@ -145,7 +145,7 @@ int main()
     dasics_libcfg_kfree(idx0);    
     
     printk("> [SMAIN] Finish Slib test...\n\r");
-    //do_scheduler();
+    do_scheduler();
     while(1);
 
     return 0;

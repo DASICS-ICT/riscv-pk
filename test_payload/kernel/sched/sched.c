@@ -132,7 +132,12 @@ static void init_pcb_stack(
     pt_regs->dasicsLibBounds[0][1] = user_stack + 8;
     pt_regs->dasicsLibBounds[1][0] = (ptr_t) &__RODATA_BEGIN__;
     pt_regs->dasicsLibBounds[1][1] = (ptr_t) &__RODATA_END__;
-    pt_regs->dasicsLibCfg0 = 0x0a0bUL;  // 0 -> RW; 1 -> RO
+    pt_regs->dasicsLibCfg0 = 0xabUL;  // 0 -> RW; 1 -> RO
+
+    extern char __UFREEZONE_TEXT_BEGIN__, __UFREEZONE_TEXT_END__;
+    pt_regs->dasicsJumpBounds[0][0] = (ptr_t) __UFREEZONE_TEXT_BEGIN__;
+    pt_regs->dasicsJumpBounds[0][1] = (ptr_t) __UFREEZONE_TEXT_END__;
+    pt_regs->dasicsJumpCfg = 0x1;   // 0 -> Valid
 
     // set sp to simulate return from switch_to
     ptr_t new_ksp = kernel_stack - sizeof(regs_context_t) -
