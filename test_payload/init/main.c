@@ -132,19 +132,19 @@ int main()
     // reset_irq_timer();
     
     // DASICS MODES TEST
-    int idx0 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R                  , (ptr_t)pub_readonly, (ptr_t)(pub_readonly) + 100);
-    int idx1 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (ptr_t)pub_rwbuffer, (ptr_t)(pub_rwbuffer + 100));
-    int idx2 = dasics_libcfg_kalloc(DASICS_LIBCFG_V                                    , (ptr_t)secret, (ptr_t)(secret + 100));
+    // int idx0 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R                  , (ptr_t)pub_readonly, (ptr_t)(pub_readonly) + 100);
+    // int idx1 = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (ptr_t)pub_rwbuffer, (ptr_t)(pub_rwbuffer + 100));
+    // int idx2 = dasics_libcfg_kalloc(DASICS_LIBCFG_V                                    , (ptr_t)secret, (ptr_t)(secret + 100));
 
-    printk("> [SMAIN] Start Slib test...\n\r");
+    // printk("> [SMAIN] Start Slib test...\n\r");
 
-    dasics_slib1();
+    // dasics_slib1();
 
-    dasics_libcfg_kfree(idx2);
-    dasics_libcfg_kfree(idx1);
-    dasics_libcfg_kfree(idx0);    
+    // dasics_libcfg_kfree(idx2);
+    // dasics_libcfg_kfree(idx1);
+    // dasics_libcfg_kfree(idx0);    
     
-    printk("> [SMAIN] Finish Slib test...\n\r");
+    // printk("> [SMAIN] Finish Slib test...\n\r");
     do_scheduler();
     while(1);
 

@@ -131,7 +131,7 @@ static void init_pcb_stack(
     pt_regs->dasicsLibBounds[0][0] = kernel_stack - PAGE_SIZE;
     pt_regs->dasicsLibBounds[0][1] = user_stack + 8;
     pt_regs->dasicsLibBounds[1][0] = (ptr_t) &__RODATA_BEGIN__;
-    pt_regs->dasicsLibBounds[1][1] = (ptr_t) &__RODATA_END__;
+    pt_regs->dasicsLibBounds[1][1] = (((ptr_t)&__RODATA_END__) & ~(0x7)) + 0x8;
     pt_regs->dasicsLibCfg0 = 0xabUL;  // 0 -> RW; 1 -> RO
 
     extern char __UFREEZONE_TEXT_BEGIN__, __UFREEZONE_TEXT_END__;

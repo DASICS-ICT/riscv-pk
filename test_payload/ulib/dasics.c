@@ -3,13 +3,114 @@
 #include <sys/syscall.h>
 #include <stdio.h>
 
+void ATTR_UMAIN_TEXT dasics_init_umaincall(uint64_t entry)
+{
+    write_csr(0x8b0, entry);  // DasicsMaincallEntry
+}
+
 void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
+    // Save some registers that should be saved by callees
+    uint64_t dasics_return_pc = read_csr(0x8a4);
+    uint64_t dasics_free_zone_return_pc = read_csr(0x8a5);
+
+    uint64_t ustatus = read_csr(ustatus);
     uint64_t ucause = read_csr(ucause);
     uint64_t utval = read_csr(utval);
     uint64_t uepc = read_csr(uepc);
 
-    printf("Info: ufault occurs, ucause = 0x%x, uepc = 0x%x, utval = 0x%x\n", ucause, uepc, utval);
-    sys_exit();
+    //printf("Info: ufault occurs, ucause = 0x%x, uepc = 0x%x, utval = 0x%x\n", ucause, uepc, utval);
+// #ifndef DASICS_DEBUG
+//     printf("Info: ready to shutdown the program due to ufault ...\n");
+//     sys_exit();
+// #else
+    switch (ucause)
+    {
+        case EXCC_DASICS_UINSTR_FAULT:
+            printf("[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n");
+            break;
+        case EXCC_DASICS_ULOAD_FAULT:
+            printf("[HANDLE_U_DASICS]: Detect ULoad Access Fault! Skip this instruction!\n");
+            break;
+        case EXCC_DASICS_USTORE_FAULT:
+            printf("[HANDLE_U_DASICS]: Detect UStore Access Fault! Skip this instruction!\n");
+            break;
+        default:
+            printf("[HANDLE_U_DASICS]: Invalid cause 0x%lx detected!\n");
+            printf("ustatus: 0x%lx uepc: 0x%lx ucause: %lu\n\r",
+                ustatus, uepc, ucause);
+            sys_exit();
+            break;
+    }
+    write_csr(uepc, uepc + 4);  // For debugging
+// #endif
+
+    // Restore those saved registers
+    write_csr(0x8b1, dasics_return_pc);
+    write_csr(0x8b2, dasics_free_zone_return_pc);
+
+    asm volatile ("ld   ra, 104(sp)\n"\
+                  "ld   s0, 96(sp)\n"\
+                  "addi sp, sp, 112\n"\
+                  "uret");
+}
+
+
+uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, uint64_t arg1, uint64_t arg2)
+{
+    uint64_t dasics_return_pc = read_csr(0x8b1);            // DasicsReturnPC
+    uint64_t dasics_free_zone_return_pc = read_csr(0x8b2);  // DasicsFreeZoneReturnPC
+
+    uint64_t retval = 0;
+
+    switch (type)
+    {
+        case UMAINCALL_EXIT:
+            sys_exit();
+            break;
+        case UMAINCALL_YIELD:
+            sys_yield();
+            break;
+        case UMAINCALL_SLEEP:
+            sys_sleep((uint32_t)arg0);
+            break;
+        case UMAINCALL_WRITE:
+            sys_write((char *)arg0);
+            break;
+        case UMAINCALL_REFLUSH:
+            sys_reflush();
+            break;
+        case UMAINCALL_MOVE_CURSOR:
+            sys_move_cursor((int)arg0, (int)arg1);
+            break;
+        case UMAINCALL_FUTEX_WAIT:
+            sys_futex_wait((volatile uint64_t *)arg0, (uint64_t)arg1);
+            break;
+        case UMAINCALL_FUTEX_WAKEUP:
+            sys_futex_wakeup((volatile uint64_t *)arg0, (int)arg1);
+            break;
+        case UMAINCALL_GET_TIMEBASE:
+            retval = (uint64_t)sys_get_timebase();
+            break;
+        case UMAINCALL_GET_TICK:
+            retval = (uint64_t)sys_get_tick();
+        default:
+            printf("Warning: Invalid umaincall number %u!\n", type);
+            break;
+    }
+
+    write_csr(0x8b1, dasics_return_pc);             // DasicsReturnPC
+    write_csr(0x8b2, dasics_free_zone_return_pc);   // DasicsFreeZoneReturnPC
+
+    // TODO: Use compiler to optimize such ugly code in the future ...
+    asm volatile ("mv       a0, a5\n"\
+                  "ld       ra, 88(sp)\n"\
+                  "ld       s0, 80(sp)\n"\
+                  "addi     sp, sp, 96\n"\
+                  "ret\n"\
+                  //"pulpret  x0,  0, x1\n" /* .word 0x0000f00b in little endian */
+                  "nop");
+
+    return retval;
 }
 
 int32_t ATTR_UMAIN_TEXT dasics_libcfg_alloc(uint64_t cfg, uint64_t lo, uint64_t hi) {

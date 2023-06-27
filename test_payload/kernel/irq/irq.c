@@ -78,16 +78,16 @@ void handle_dasics(regs_context_t *regs, uint64_t stval, uint64_t cause)
     switch (cause)
     {
         case EXCC_DASICS_SINSTR_FAULT:
-            printk("[HANDLE_DASICS]: Detect SInst Access Fault! Skip this instruction!\n");
+            printk("[HANDLE_S_DASICS]: Detect SInst Access Fault! Skip this instruction!\n");
             break;
         case EXCC_DASICS_SLOAD_FAULT:
-            printk("[HANDLE_DASICS]: Detect SLoad Access Fault! Skip this instruction!\n");
+            printk("[HANDLE_S_DASICS]: Detect SLoad Access Fault! Skip this instruction!\n");
             break;
         case EXCC_DASICS_SSTORE_FAULT:
-            printk("[HANDLE_DASICS]: Detect SStore Access Fault! Skip this instruction!\n");
+            printk("[HANDLE_S_DASICS]: Detect SStore Access Fault! Skip this instruction!\n");
             break;
         default:
-            printk("[HANDLE_DASICS]: Invalid cause 0x%lx detected!\n");
+            printk("[HANDLE_S_DASICS]: Invalid cause 0x%lx detected!\n");
             printk("sstatus: 0x%lx sbadaddr: 0x%lx scause: %lu\n\r",
                 regs->sstatus, regs->sbadaddr, regs->scause);
             printk("sepc: 0x%lx\n\r", regs->sepc);

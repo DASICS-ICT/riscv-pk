@@ -39,7 +39,7 @@ SECTIONS
     __UFREEZONE_TEXT_END__ = .;
   }
   __RODATA_BEGIN__ = .;
-  .rodata         : { *(.rodata .rodata.* .gnu.linkonce.r.*) }
+  .rodata ALIGN(8)     : { *(.rodata .rodata.* .gnu.linkonce.r.*) }
   __RODATA_END__ = .;
   .rodata1        : { *(.rodata1) }
   .sdata2         :

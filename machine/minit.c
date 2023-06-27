@@ -72,16 +72,16 @@ static void delegate_traps()
   assert(read_csr(mideleg) == interrupts);
   assert(read_csr(medeleg) == exceptions);
 
-  // if(!supports_extension('N'))
-	//   return;
+  if(!supports_extension('N'))
+	  return;
 
-  // uintptr_t uexceptions = 
-  //   (1U << CAUSE_DASICS_UFETCH_FAULT) |
-  //   (1U << CAUSE_DASICS_ULOAD_FAULT)  |
-  //   (1U << CAUSE_DASICS_USTORE_FAULT) |
-  //   (1U << CAUSE_DASICS_UECALL_FAULT);
-  // write_csr(sedeleg, uexceptions);
-  // assert(read_csr(sedeleg) == uexceptions);
+  uintptr_t uexceptions = 
+    (1U << CAUSE_DASICS_UINSTR_FAULT) |
+    (1U << CAUSE_DASICS_ULOAD_FAULT)  |
+    (1U << CAUSE_DASICS_USTORE_FAULT) |
+    (1U << CAUSE_DASICS_UECALL_FAULT);
+  write_csr(sedeleg, uexceptions);
+  assert(read_csr(sedeleg) == uexceptions);
 }
 
 static void dump_misa(uint32_t misa) {

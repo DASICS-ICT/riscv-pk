@@ -63,7 +63,8 @@ uint64_t ATTR_SMAIN_TEXT dasics_smaincall(SmaincallTypes type, uint64_t arg0, ui
                  "ld        ra, 88(sp)\n"\
                  "ld        s0, 80(sp)\n"\
                  "addi      sp, sp, 96\n"\
-                 ".word 0x0000f00b \n" /* dasicsret x0,  0, x1 in little endian */ \
+                 "ret\n"\
+                 //".word 0x0000f00b \n" /* dasicsret x0,  0, x1 in little endian */ 
                  "nop");
 
     return retval;
