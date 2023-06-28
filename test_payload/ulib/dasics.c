@@ -10,8 +10,9 @@ void ATTR_UMAIN_TEXT dasics_init_umaincall(uint64_t entry)
 
 void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
     // Save some registers that should be saved by callees
-    uint64_t dasics_return_pc = read_csr(0x8a4);
-    uint64_t dasics_free_zone_return_pc = read_csr(0x8a5);
+    uint64_t dasics_return_pc = read_csr(0x8b1);            // DasicsReturnPC
+    uint64_t dasics_free_zone_return_pc = read_csr(0x8b2);  // DasicsFreeZoneReturnPC
+
 
     uint64_t ustatus = read_csr(ustatus);
     uint64_t ucause = read_csr(ucause);
@@ -26,18 +27,20 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
     switch (ucause)
     {
         case EXCC_DASICS_UINSTR_FAULT:
-            printf("[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n");
+            //const char* message_1 = "[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n";          
+            main_printf("[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n", &printf);
             break;
         case EXCC_DASICS_ULOAD_FAULT:
-            printf("[HANDLE_U_DASICS]: Detect ULoad Access Fault! Skip this instruction!\n");
+            main_printf("[HANDLE_U_DASICS]: Detect ULoad Access Fault! Skip this instruction!\n", &printf);
             break;
         case EXCC_DASICS_USTORE_FAULT:
-            printf("[HANDLE_U_DASICS]: Detect UStore Access Fault! Skip this instruction!\n");
+            main_printf("[HANDLE_U_DASICS]: Detect UStore Access Fault! Skip this instruction!\n", &printf);
             break;
         default:
-            printf("[HANDLE_U_DASICS]: Invalid cause 0x%lx detected!\n");
-            printf("ustatus: 0x%lx uepc: 0x%lx ucause: %lu\n\r",
-                ustatus, uepc, ucause);
+            main_printf("[HANDLE_U_DASICS]: Invalid cause! exit..", &printf);
+            //printf("[HANDLE_U_DASICS]: Invalid cause 0x%lx detected!\n");
+            // printf("ustatus: 0x%lx uepc: 0x%lx ucause: %lu\n\r",
+            //     ustatus, uepc, ucause);
             sys_exit();
             break;
     }
@@ -93,6 +96,21 @@ uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, ui
             break;
         case UMAINCALL_GET_TICK:
             retval = (uint64_t)sys_get_tick();
+            break;
+        case UMAINCALL_PRINTF:
+            // asm volatile (
+            //     "auipc t0,  0\n"\
+            //     "addi  t0,  t0,  20\n"\
+            //     "csrw  0x8b1,  t0\n"\
+            //     "mv    a0,  %[fmt]\n"\
+            //     "jal   ra,  %[func_name]\n"\
+            //     "nop"
+            //     :
+            //     :[fmt]"r"((void*)arg0), [func_name]"i"(&printf)
+            //     :"t0", "a0", "ra"
+            // );
+            main_printf((void*)arg0, &printf);
+            break; 
         default:
             printf("Warning: Invalid umaincall number %u!\n", type);
             break;
@@ -100,6 +118,8 @@ uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, ui
 
     write_csr(0x8b1, dasics_return_pc);             // DasicsReturnPC
     write_csr(0x8b2, dasics_free_zone_return_pc);   // DasicsFreeZoneReturnPC
+
+    //if(type == UMAINCALL_WRITE_AZONE_RETPC) write_csr(0x8b2, arg0); 
 
     // TODO: Use compiler to optimize such ugly code in the future ...
     asm volatile ("mv       a0, a5\n"\
