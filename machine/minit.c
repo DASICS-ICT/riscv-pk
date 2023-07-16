@@ -214,7 +214,7 @@ void init_first_hart(uintptr_t hartid, uintptr_t dtb)
   query_uart16550(dtb);
   query_htif(dtb);
   /* Ugly way to initialize uartlite */
-  uartlite_init();
+  // uartlite_init();
   printm("bbl loader\r\n");
 
   hart_init();
