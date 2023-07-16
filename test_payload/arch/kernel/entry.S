@@ -100,8 +100,6 @@ _save_context:
 
   csrr s0, CSR_DLCFG0
   sd   s0, OFFSET_REG_DLCFG0(sp)
-  csrr s0, CSR_DLCFG1
-  sd   s0, OFFSET_REG_DLCFG1(sp)
 
   csrr s0, CSR_DLBOUND0
   sd   s0, OFFSET_REG_DLBOUND0(sp)
@@ -135,38 +133,6 @@ _save_context:
   sd   s0, OFFSET_REG_DLBOUND14(sp)
   csrr s0, CSR_DLBOUND15
   sd   s0, OFFSET_REG_DLBOUND15(sp)
-  csrr s0, CSR_DLBOUND16
-  sd   s0, OFFSET_REG_DLBOUND16(sp)
-  csrr s0, CSR_DLBOUND17
-  sd   s0, OFFSET_REG_DLBOUND17(sp)
-  csrr s0, CSR_DLBOUND18
-  sd   s0, OFFSET_REG_DLBOUND18(sp)
-  csrr s0, CSR_DLBOUND19
-  sd   s0, OFFSET_REG_DLBOUND19(sp)
-  csrr s0, CSR_DLBOUND20
-  sd   s0, OFFSET_REG_DLBOUND20(sp)
-  csrr s0, CSR_DLBOUND21
-  sd   s0, OFFSET_REG_DLBOUND21(sp)
-  csrr s0, CSR_DLBOUND22
-  sd   s0, OFFSET_REG_DLBOUND22(sp)
-  csrr s0, CSR_DLBOUND23
-  sd   s0, OFFSET_REG_DLBOUND23(sp)
-  csrr s0, CSR_DLBOUND24
-  sd   s0, OFFSET_REG_DLBOUND24(sp)
-  csrr s0, CSR_DLBOUND25
-  sd   s0, OFFSET_REG_DLBOUND25(sp)
-  csrr s0, CSR_DLBOUND26
-  sd   s0, OFFSET_REG_DLBOUND26(sp)
-  csrr s0, CSR_DLBOUND27
-  sd   s0, OFFSET_REG_DLBOUND27(sp)
-  csrr s0, CSR_DLBOUND28
-  sd   s0, OFFSET_REG_DLBOUND28(sp)
-  csrr s0, CSR_DLBOUND29
-  sd   s0, OFFSET_REG_DLBOUND29(sp)
-  csrr s0, CSR_DLBOUND30
-  sd   s0, OFFSET_REG_DLBOUND30(sp)
-  csrr s0, CSR_DLBOUND31
-  sd   s0, OFFSET_REG_DLBOUND31(sp)
 
   csrr s0, CSR_DMAINCALL
   sd   s0, OFFSET_REG_DMAINCALL(sp)
@@ -212,8 +178,6 @@ _save_context:
 
   ld   s0, OFFSET_REG_DLCFG0(sp)
   csrw CSR_DLCFG0, s0
-  ld   s0, OFFSET_REG_DLCFG1(sp)
-  csrw CSR_DLCFG1, s0
 
   ld   s0, OFFSET_REG_DLBOUND0(sp)
   csrw CSR_DLBOUND0, s0
@@ -247,38 +211,6 @@ _save_context:
   csrw CSR_DLBOUND14, s0
   ld   s0, OFFSET_REG_DLBOUND15(sp)
   csrw CSR_DLBOUND15, s0
-  ld   s0, OFFSET_REG_DLBOUND16(sp)
-  csrw CSR_DLBOUND16, s0
-  ld   s0, OFFSET_REG_DLBOUND17(sp)
-  csrw CSR_DLBOUND17, s0
-  ld   s0, OFFSET_REG_DLBOUND18(sp)
-  csrw CSR_DLBOUND18, s0
-  ld   s0, OFFSET_REG_DLBOUND19(sp)
-  csrw CSR_DLBOUND19, s0
-  ld   s0, OFFSET_REG_DLBOUND20(sp)
-  csrw CSR_DLBOUND20, s0
-  ld   s0, OFFSET_REG_DLBOUND21(sp)
-  csrw CSR_DLBOUND21, s0
-  ld   s0, OFFSET_REG_DLBOUND22(sp)
-  csrw CSR_DLBOUND22, s0
-  ld   s0, OFFSET_REG_DLBOUND23(sp)
-  csrw CSR_DLBOUND23, s0
-  ld   s0, OFFSET_REG_DLBOUND24(sp)
-  csrw CSR_DLBOUND24, s0
-  ld   s0, OFFSET_REG_DLBOUND25(sp)
-  csrw CSR_DLBOUND25, s0
-  ld   s0, OFFSET_REG_DLBOUND26(sp)
-  csrw CSR_DLBOUND26, s0
-  ld   s0, OFFSET_REG_DLBOUND27(sp)
-  csrw CSR_DLBOUND27, s0
-  ld   s0, OFFSET_REG_DLBOUND28(sp)
-  csrw CSR_DLBOUND28, s0
-  ld   s0, OFFSET_REG_DLBOUND29(sp)
-  csrw CSR_DLBOUND29, s0
-  ld   s0, OFFSET_REG_DLBOUND30(sp)
-  csrw CSR_DLBOUND30, s0
-  ld   s0, OFFSET_REG_DLBOUND31(sp)
-  csrw CSR_DLBOUND31, s0
 
   ld   s0, OFFSET_REG_DMAINCALL(sp)
   csrw CSR_DMAINCALL, s0
@@ -426,7 +358,6 @@ ENTRY(exception_handler_entry)
 
   li   t0, 0x0b0b0c0aUL
   csrw CSR_DLCFG0, t0
-  csrw CSR_DLCFG1, x0
 
   la   t0, __RODATA_END__
   la   t1, __RODATA_BEGIN__

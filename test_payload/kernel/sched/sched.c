@@ -132,7 +132,6 @@ static void init_pcb_stack(
     extern char __RODATA_BEGIN__, __RODATA_END__;
     extern char __UFREEZONE_TEXT_BEGIN__, __UFREEZONE_TEXT_END__;
     pt_regs->dasicsLibCfg0          = 0x0c0a0bUL;
-    pt_regs->dasicsLibCfg1          = 0;
     pt_regs->dasicsLibBounds[0]     = user_stack;
     pt_regs->dasicsLibBounds[1]     = kernel_stack - PAGE_SIZE;
     pt_regs->dasicsLibBounds[2]     = (ptr_t)&__RODATA_END__;
@@ -143,7 +142,7 @@ static void init_pcb_stack(
     int cfgidx = dasics_libcfg_kalloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W,
         user_stack, kernel_stack - PAGE_SIZE);  // Allow kbzero lib function to access this memory space
     assert(cfgidx >= 0);
-    kbzero(&pt_regs->dasicsLibBounds[6], 29 * sizeof(reg_t));
+    kbzero(&pt_regs->dasicsLibBounds[6], 13 * sizeof(reg_t));
     dasics_libcfg_kfree(cfgidx);
 
     // set sp to simulate return from switch_to

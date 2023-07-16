@@ -64,8 +64,7 @@ typedef struct regs_context
 
     /* Saved DASICS user registers */
     reg_t dasicsLibCfg0;
-    reg_t dasicsLibCfg1;
-    reg_t dasicsLibBounds[32];
+    reg_t dasicsLibBounds[16];
 
     reg_t dasicsMaincallEntry;
     reg_t dasicsReturnPC;
