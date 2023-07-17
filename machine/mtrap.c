@@ -223,6 +223,15 @@ void pmp_trap(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
   redirect_trap(mepc, read_csr(mstatus), read_csr(mbadaddr));
 }
 
+void dasics_trap(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
+{
+  printm("Info: DASICS exception occurs, mcause = 0x%x, mepc = 0x%x, mbadaddr = 0x%x\n",
+    mcause, mepc, read_csr(mbadaddr));
+  // write_csr(mepc, mepc + 4);
+  printm("Info: Ready to shutdown the program ...\n");
+  mcall_shutdown(0);  // Shutdown the whole program when DASICS exception occurs
+}
+
 static void machine_page_fault(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
   // MPRV=1 iff this trap occurred while emulating an instruction on behalf
