@@ -60,8 +60,8 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
 
 uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, uint64_t arg1, uint64_t arg2)
 {
-    uint64_t dasics_return_pc = read_csr(0x8b1);            // DasicsReturnPC
-    uint64_t dasics_free_zone_return_pc = read_csr(0x8b2);  // DasicsFreeZoneReturnPC
+    // uint64_t dasics_return_pc = read_csr(0x8b1);            // DasicsReturnPC
+    // uint64_t dasics_free_zone_return_pc = read_csr(0x8b2);  // DasicsFreeZoneReturnPC
 
     uint64_t retval = 0;
 
@@ -109,15 +109,15 @@ uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, ui
             //     :[fmt]"r"((void*)arg0), [func_name]"i"(&printf)
             //     :"t0", "a0", "ra"
             // );
-            main_printf((void*)arg0, &printf);
+            printf((void*)arg0);
             break; 
         default:
             printf("Warning: Invalid umaincall number %u!\n", type);
             break;
     }
 
-    write_csr(0x8b1, dasics_return_pc);             // DasicsReturnPC
-    write_csr(0x8b2, dasics_free_zone_return_pc);   // DasicsFreeZoneReturnPC
+    // write_csr(0x8b1, dasics_return_pc);             // DasicsReturnPC
+    // write_csr(0x8b2, dasics_free_zone_return_pc);   // DasicsFreeZoneReturnPC
 
     //if(type == UMAINCALL_WRITE_AZONE_RETPC) write_csr(0x8b2, arg0); 
 

@@ -222,7 +222,8 @@ int ATTR_UFREEZONE_TEXT vprintf(const char *fmt, va_list _va)
 
     buff[ret] = '\0';
 
-    dasics_umaincall(UMAINCALL_WRITE, (uint64_t)buff, 0, 0);
+    sys_write(buff);
+    //dasics_umaincall(UMAINCALL_WRITE, (uint64_t)buff, 0, 0);
 
     return ret;
 }

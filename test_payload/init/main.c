@@ -108,12 +108,12 @@ int main()
     printk("> [INIT] PCB initialized.\n");
     
     // init DASICS protection
-    init_dasics();
+    //init_dasics();
 
-    main_printk("> [INIT] Dasics mechanism initialized successfully.\n\r", &printk);
+    // main_printk("> [INIT] Dasics mechanism initialized successfully.\n\r", &printk);
     //printk("> [INIT] Dasics mechanism initialized successfully.\n\r");
 
-    // read CPU frequency
+    // readπ CPU frequency
     // time_base = sbi_read_fdt(TIMEBASE);
     // time_base = 500000000;
     // printk("time_base = %d\n\r", time_base);
@@ -123,13 +123,13 @@ int main()
     // init interrupt
     init_exception();
 
-    //printk("> [INIT] Interrupt processing initialized.\n\r");
-    main_printk("> [INIT] Interrupt processing initialized.\n\r", &printk);
+    printk("> [INIT] Interrupt processing initialized.\n\r");
+    //main_printk("> [INIT] Interrupt processing initialized.\n\r", &printk);
 
     // init system call table
     init_syscall();
-    //printk("> [INIT] Syscall initialized.\n\r");
-    main_printk("> [INIT] Syscall initialized.\n\r", &printk);
+    printk("> [INIT] Syscall initialized.\n\r");
+    //main_printk("> [INIT] Syscall initialized.\n\r", &printk);
 
     // init screen
     // init_screen();

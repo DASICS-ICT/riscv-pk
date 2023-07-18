@@ -50,126 +50,126 @@ _save_context:
   sd x30, OFFSET_REG_T5(sp)
   sd x31, OFFSET_REG_T6(sp)
 
-  /* Save N Extension CSRs */
-  csrr s0, CSR_USTATUS
-  sd   s0, OFFSET_REG_USTATUS(sp)
-  csrr s0, CSR_UEPC
-  sd   s0, OFFSET_REG_UEPC(sp)
-  csrr s0, CSR_UTVAL
-  sd   s0, OFFSET_REG_UBADADDR(sp)
-  csrr s0, CSR_UCAUSE
-  sd   s0, OFFSET_REG_UCAUSE(sp)
-  csrr s0, CSR_UTVEC
-  sd   s0, OFFSET_REG_UTVEC(sp)
-  csrr s0, CSR_UIE
-  sd   s0, OFFSET_REG_UIE(sp)
-  csrr s0, CSR_UIP
-  sd   s0, OFFSET_REG_UIP(sp)
-  csrr s0, CSR_USCRATCH
-  sd   s0, OFFSET_REG_USCRATCH(sp)
+  # /* Save N Extension CSRs */
+  # csrr s0, CSR_USTATUS
+  # sd   s0, OFFSET_REG_USTATUS(sp)
+  # csrr s0, CSR_UEPC
+  # sd   s0, OFFSET_REG_UEPC(sp)
+  # csrr s0, CSR_UTVAL
+  # sd   s0, OFFSET_REG_UBADADDR(sp)
+  # csrr s0, CSR_UCAUSE
+  # sd   s0, OFFSET_REG_UCAUSE(sp)
+  # csrr s0, CSR_UTVEC
+  # sd   s0, OFFSET_REG_UTVEC(sp)
+  # csrr s0, CSR_UIE
+  # sd   s0, OFFSET_REG_UIE(sp)
+  # csrr s0, CSR_UIP
+  # sd   s0, OFFSET_REG_UIP(sp)
+  # csrr s0, CSR_USCRATCH
+  # sd   s0, OFFSET_REG_USCRATCH(sp)
 
-  /* Save DASICS context */
-  csrr s0, CSR_DUMCFG
-  sd   s0, OFFSET_REG_DUMCFG(sp)
-  csrr s0, CSR_DUMBOUNDLO
-  sd   s0, OFFSET_REG_DUMBOUNDLO(sp)
-  csrr s0, CSR_DUMBOUNDHI
-  sd   s0, OFFSET_REG_DUMBOUNDHI(sp)
+  # /* Save DASICS context */
+  # csrr s0, CSR_DUMCFG
+  # sd   s0, OFFSET_REG_DUMCFG(sp)
+  # csrr s0, CSR_DUMBOUNDLO
+  # sd   s0, OFFSET_REG_DUMBOUNDLO(sp)
+  # csrr s0, CSR_DUMBOUNDHI
+  # sd   s0, OFFSET_REG_DUMBOUNDHI(sp)
 
-  csrr s0, CSR_DLCFG0
-  sd   s0, OFFSET_REG_DLCFG0(sp)
+  # csrr s0, CSR_DLCFG0
+  # sd   s0, OFFSET_REG_DLCFG0(sp)
 
-  csrr s0, CSR_DLBOUND0LO
-  sd   s0, OFFSET_REG_DLBOUND0LO(sp)
-  csrr s0, CSR_DLBOUND0HI
-  sd   s0, OFFSET_REG_DLBOUND0HI(sp)
-  csrr s0, CSR_DLBOUND1LO
-  sd   s0, OFFSET_REG_DLBOUND1LO(sp)
-  csrr s0, CSR_DLBOUND1HI
-  sd   s0, OFFSET_REG_DLBOUND1HI(sp)
-  csrr s0, CSR_DLBOUND2LO
-  sd   s0, OFFSET_REG_DLBOUND2LO(sp)
-  csrr s0, CSR_DLBOUND2HI
-  sd   s0, OFFSET_REG_DLBOUND2HI(sp)
-  csrr s0, CSR_DLBOUND3LO
-  sd   s0, OFFSET_REG_DLBOUND3LO(sp)
-  csrr s0, CSR_DLBOUND3HI
-  sd   s0, OFFSET_REG_DLBOUND3HI(sp)
-  csrr s0, CSR_DLBOUND4LO
-  sd   s0, OFFSET_REG_DLBOUND4LO(sp)
-  csrr s0, CSR_DLBOUND4HI
-  sd   s0, OFFSET_REG_DLBOUND4HI(sp)
-  csrr s0, CSR_DLBOUND5LO
-  sd   s0, OFFSET_REG_DLBOUND5LO(sp)
-  csrr s0, CSR_DLBOUND5HI
-  sd   s0, OFFSET_REG_DLBOUND5HI(sp)
-  csrr s0, CSR_DLBOUND6LO
-  sd   s0, OFFSET_REG_DLBOUND6LO(sp)
-  csrr s0, CSR_DLBOUND6HI
-  sd   s0, OFFSET_REG_DLBOUND6HI(sp)
-  csrr s0, CSR_DLBOUND7LO
-  sd   s0, OFFSET_REG_DLBOUND7LO(sp)
-  csrr s0, CSR_DLBOUND7HI
-  sd   s0, OFFSET_REG_DLBOUND7HI(sp)
-  csrr s0, CSR_DLBOUND8LO
-  sd   s0, OFFSET_REG_DLBOUND8LO(sp)
-  csrr s0, CSR_DLBOUND8HI
-  sd   s0, OFFSET_REG_DLBOUND8HI(sp)
-  csrr s0, CSR_DLBOUND9LO
-  sd   s0, OFFSET_REG_DLBOUND9LO(sp)
-  csrr s0, CSR_DLBOUND9HI
-  sd   s0, OFFSET_REG_DLBOUND9HI(sp)
-  csrr s0, CSR_DLBOUND10LO
-  sd   s0, OFFSET_REG_DLBOUND10LO(sp)
-  csrr s0, CSR_DLBOUND10HI
-  sd   s0, OFFSET_REG_DLBOUND10HI(sp)
-  csrr s0, CSR_DLBOUND11LO
-  sd   s0, OFFSET_REG_DLBOUND11LO(sp)
-  csrr s0, CSR_DLBOUND11HI
-  sd   s0, OFFSET_REG_DLBOUND11HI(sp)
-  csrr s0, CSR_DLBOUND12LO
-  sd   s0, OFFSET_REG_DLBOUND12LO(sp)
-  csrr s0, CSR_DLBOUND12HI
-  sd   s0, OFFSET_REG_DLBOUND12HI(sp)
-  csrr s0, CSR_DLBOUND13LO
-  sd   s0, OFFSET_REG_DLBOUND13LO(sp)
-  csrr s0, CSR_DLBOUND13HI
-  sd   s0, OFFSET_REG_DLBOUND13HI(sp)
-  csrr s0, CSR_DLBOUND14LO
-  sd   s0, OFFSET_REG_DLBOUND14LO(sp)
-  csrr s0, CSR_DLBOUND14HI
-  sd   s0, OFFSET_REG_DLBOUND14HI(sp)
-  csrr s0, CSR_DLBOUND15LO
-  sd   s0, OFFSET_REG_DLBOUND15LO(sp)
-  csrr s0, CSR_DLBOUND15HI 
-  sd   s0, OFFSET_REG_DLBOUND15HI(sp)
+  # csrr s0, CSR_DLBOUND0LO
+  # sd   s0, OFFSET_REG_DLBOUND0LO(sp)
+  # csrr s0, CSR_DLBOUND0HI
+  # sd   s0, OFFSET_REG_DLBOUND0HI(sp)
+  # csrr s0, CSR_DLBOUND1LO
+  # sd   s0, OFFSET_REG_DLBOUND1LO(sp)
+  # csrr s0, CSR_DLBOUND1HI
+  # sd   s0, OFFSET_REG_DLBOUND1HI(sp)
+  # csrr s0, CSR_DLBOUND2LO
+  # sd   s0, OFFSET_REG_DLBOUND2LO(sp)
+  # csrr s0, CSR_DLBOUND2HI
+  # sd   s0, OFFSET_REG_DLBOUND2HI(sp)
+  # csrr s0, CSR_DLBOUND3LO
+  # sd   s0, OFFSET_REG_DLBOUND3LO(sp)
+  # csrr s0, CSR_DLBOUND3HI
+  # sd   s0, OFFSET_REG_DLBOUND3HI(sp)
+  # csrr s0, CSR_DLBOUND4LO
+  # sd   s0, OFFSET_REG_DLBOUND4LO(sp)
+  # csrr s0, CSR_DLBOUND4HI
+  # sd   s0, OFFSET_REG_DLBOUND4HI(sp)
+  # csrr s0, CSR_DLBOUND5LO
+  # sd   s0, OFFSET_REG_DLBOUND5LO(sp)
+  # csrr s0, CSR_DLBOUND5HI
+  # sd   s0, OFFSET_REG_DLBOUND5HI(sp)
+  # csrr s0, CSR_DLBOUND6LO
+  # sd   s0, OFFSET_REG_DLBOUND6LO(sp)
+  # csrr s0, CSR_DLBOUND6HI
+  # sd   s0, OFFSET_REG_DLBOUND6HI(sp)
+  # csrr s0, CSR_DLBOUND7LO
+  # sd   s0, OFFSET_REG_DLBOUND7LO(sp)
+  # csrr s0, CSR_DLBOUND7HI
+  # sd   s0, OFFSET_REG_DLBOUND7HI(sp)
+  # csrr s0, CSR_DLBOUND8LO
+  # sd   s0, OFFSET_REG_DLBOUND8LO(sp)
+  # csrr s0, CSR_DLBOUND8HI
+  # sd   s0, OFFSET_REG_DLBOUND8HI(sp)
+  # csrr s0, CSR_DLBOUND9LO
+  # sd   s0, OFFSET_REG_DLBOUND9LO(sp)
+  # csrr s0, CSR_DLBOUND9HI
+  # sd   s0, OFFSET_REG_DLBOUND9HI(sp)
+  # csrr s0, CSR_DLBOUND10LO
+  # sd   s0, OFFSET_REG_DLBOUND10LO(sp)
+  # csrr s0, CSR_DLBOUND10HI
+  # sd   s0, OFFSET_REG_DLBOUND10HI(sp)
+  # csrr s0, CSR_DLBOUND11LO
+  # sd   s0, OFFSET_REG_DLBOUND11LO(sp)
+  # csrr s0, CSR_DLBOUND11HI
+  # sd   s0, OFFSET_REG_DLBOUND11HI(sp)
+  # csrr s0, CSR_DLBOUND12LO
+  # sd   s0, OFFSET_REG_DLBOUND12LO(sp)
+  # csrr s0, CSR_DLBOUND12HI
+  # sd   s0, OFFSET_REG_DLBOUND12HI(sp)
+  # csrr s0, CSR_DLBOUND13LO
+  # sd   s0, OFFSET_REG_DLBOUND13LO(sp)
+  # csrr s0, CSR_DLBOUND13HI
+  # sd   s0, OFFSET_REG_DLBOUND13HI(sp)
+  # csrr s0, CSR_DLBOUND14LO
+  # sd   s0, OFFSET_REG_DLBOUND14LO(sp)
+  # csrr s0, CSR_DLBOUND14HI
+  # sd   s0, OFFSET_REG_DLBOUND14HI(sp)
+  # csrr s0, CSR_DLBOUND15LO
+  # sd   s0, OFFSET_REG_DLBOUND15LO(sp)
+  # csrr s0, CSR_DLBOUND15HI 
+  # sd   s0, OFFSET_REG_DLBOUND15HI(sp)
 
-  csrr s0, CSR_DMAINCALL
-  sd   s0, OFFSET_REG_DMAINCALL(sp)
-  csrr s0, CSR_DRETURNPC
-  sd   s0, OFFSET_REG_DRETURNPC(sp)
-  csrr s0, CSR_DFZRETURN
-  sd   s0, OFFSET_REG_DFZRETURN(sp)
+  # csrr s0, CSR_DMAINCALL
+  # sd   s0, OFFSET_REG_DMAINCALL(sp)
+  # csrr s0, CSR_DRETURNPC
+  # sd   s0, OFFSET_REG_DRETURNPC(sp)
+  # csrr s0, CSR_DFZRETURN
+  # sd   s0, OFFSET_REG_DFZRETURN(sp)
 
-  csrr s0, CSR_DJBOUND0LO
-  sd   s0, OFFSET_REG_DJBOUND0LO(sp)
-  csrr s0, CSR_DJBOUND0HI
-  sd   s0, OFFSET_REG_DJBOUND0HI(sp)
-  csrr s0, CSR_DJBOUND1LO
-  sd   s0, OFFSET_REG_DJBOUND1LO(sp)
-  csrr s0, CSR_DJBOUND1HI
-  sd   s0, OFFSET_REG_DJBOUND1HI(sp)
-  csrr s0, CSR_DJBOUND2LO
-  sd   s0, OFFSET_REG_DJBOUND2LO(sp)
-  csrr s0, CSR_DJBOUND2HI
-  sd   s0, OFFSET_REG_DJBOUND2HI(sp)
-  csrr s0, CSR_DJBOUND3LO
-  sd   s0, OFFSET_REG_DJBOUND3LO(sp)
-  csrr s0, CSR_DJBOUND3HI
-  sd   s0, OFFSET_REG_DJBOUND3HI(sp)
+  # csrr s0, CSR_DJBOUND0LO
+  # sd   s0, OFFSET_REG_DJBOUND0LO(sp)
+  # csrr s0, CSR_DJBOUND0HI
+  # sd   s0, OFFSET_REG_DJBOUND0HI(sp)
+  # csrr s0, CSR_DJBOUND1LO
+  # sd   s0, OFFSET_REG_DJBOUND1LO(sp)
+  # csrr s0, CSR_DJBOUND1HI
+  # sd   s0, OFFSET_REG_DJBOUND1HI(sp)
+  # csrr s0, CSR_DJBOUND2LO
+  # sd   s0, OFFSET_REG_DJBOUND2LO(sp)
+  # csrr s0, CSR_DJBOUND2HI
+  # sd   s0, OFFSET_REG_DJBOUND2HI(sp)
+  # csrr s0, CSR_DJBOUND3LO
+  # sd   s0, OFFSET_REG_DJBOUND3LO(sp)
+  # csrr s0, CSR_DJBOUND3HI
+  # sd   s0, OFFSET_REG_DJBOUND3HI(sp)
 
-  csrr s0, CSR_DJCFG
-  sd   s0, OFFSET_REG_DJCFG(sp)
+  # csrr s0, CSR_DJCFG
+  # sd   s0, OFFSET_REG_DJCFG(sp)
 
   /*
    * Disable user-mode memory access as it should only be set in the
@@ -200,126 +200,126 @@ _save_context:
   csrw CSR_SSTATUS, a0
   csrw CSR_SEPC, a2
 
-  /* Restore N Extension CSRs */
-  ld   s0, OFFSET_REG_USTATUS(sp)
-  csrw CSR_USTATUS, s0
-  ld   s0, OFFSET_REG_UEPC(sp)
-  csrw CSR_UEPC, s0
-  ld   s0, OFFSET_REG_UBADADDR(sp)
-  csrw CSR_UTVAL, s0
-  ld   s0, OFFSET_REG_UCAUSE(sp)
-  csrw CSR_UCAUSE, s0
-  ld   s0, OFFSET_REG_UTVEC(sp)
-  csrw CSR_UTVEC, s0
-  ld   s0, OFFSET_REG_UIE(sp)
-  csrw CSR_UIE, s0
-  ld   s0, OFFSET_REG_UIP(sp)
-  csrw CSR_UIP, s0
-  ld   s0, OFFSET_REG_USCRATCH(sp)
-  csrw CSR_USCRATCH, s0
+  # /* Restore N Extension CSRs */
+  # ld   s0, OFFSET_REG_USTATUS(sp)
+  # csrw CSR_USTATUS, s0
+  # ld   s0, OFFSET_REG_UEPC(sp)
+  # csrw CSR_UEPC, s0
+  # ld   s0, OFFSET_REG_UBADADDR(sp)
+  # csrw CSR_UTVAL, s0
+  # ld   s0, OFFSET_REG_UCAUSE(sp)
+  # csrw CSR_UCAUSE, s0
+  # ld   s0, OFFSET_REG_UTVEC(sp)
+  # csrw CSR_UTVEC, s0
+  # ld   s0, OFFSET_REG_UIE(sp)
+  # csrw CSR_UIE, s0
+  # ld   s0, OFFSET_REG_UIP(sp)
+  # csrw CSR_UIP, s0
+  # ld   s0, OFFSET_REG_USCRATCH(sp)
+  # csrw CSR_USCRATCH, s0
 
-  /* Restore DASICS context */
-  ld   s0, OFFSET_REG_DUMCFG(sp)
-  csrw CSR_DUMCFG, s0
-  ld   s0, OFFSET_REG_DUMBOUNDLO(sp)
-  csrw CSR_DUMBOUNDLO, s0
-  ld   s0, OFFSET_REG_DUMBOUNDHI(sp)
-  csrw CSR_DUMBOUNDHI, s0
+  # /* Restore DASICS context */
+  # ld   s0, OFFSET_REG_DUMCFG(sp)
+  # csrw CSR_DUMCFG, s0
+  # ld   s0, OFFSET_REG_DUMBOUNDLO(sp)
+  # csrw CSR_DUMBOUNDLO, s0
+  # ld   s0, OFFSET_REG_DUMBOUNDHI(sp)
+  # csrw CSR_DUMBOUNDHI, s0
 
-  ld   s0, OFFSET_REG_DLCFG0(sp)
-  csrw CSR_DLCFG0, s0
+  # ld   s0, OFFSET_REG_DLCFG0(sp)
+  # csrw CSR_DLCFG0, s0
 
-  ld   s0, OFFSET_REG_DLBOUND0LO(sp)
-  csrw CSR_DLBOUND0LO, s0
-  ld   s0, OFFSET_REG_DLBOUND0HI(sp)
-  csrw CSR_DLBOUND0HI, s0
-  ld   s0, OFFSET_REG_DLBOUND1LO(sp)
-  csrw CSR_DLBOUND1LO, s0
-  ld   s0, OFFSET_REG_DLBOUND1HI(sp)
-  csrw CSR_DLBOUND1HI, s0
-  ld   s0, OFFSET_REG_DLBOUND2LO(sp)
-  csrw CSR_DLBOUND2LO, s0
-  ld   s0, OFFSET_REG_DLBOUND2HI(sp)
-  csrw CSR_DLBOUND2HI, s0
-  ld   s0, OFFSET_REG_DLBOUND3LO(sp)
-  csrw CSR_DLBOUND3LO, s0
-  ld   s0, OFFSET_REG_DLBOUND3HI(sp)
-  csrw CSR_DLBOUND3HI, s0
-  ld   s0, OFFSET_REG_DLBOUND4LO(sp)
-  csrw CSR_DLBOUND4LO, s0
-  ld   s0, OFFSET_REG_DLBOUND4HI(sp)
-  csrw CSR_DLBOUND4HI, s0
-  ld   s0, OFFSET_REG_DLBOUND5LO(sp)
-  csrw CSR_DLBOUND5LO, s0
-  ld   s0, OFFSET_REG_DLBOUND5HI(sp)
-  csrw CSR_DLBOUND5HI, s0
-  ld   s0, OFFSET_REG_DLBOUND6LO(sp)
-  csrw CSR_DLBOUND6LO, s0
-  ld   s0, OFFSET_REG_DLBOUND6HI(sp)
-  csrw CSR_DLBOUND6HI, s0
-  ld   s0, OFFSET_REG_DLBOUND7LO(sp)
-  csrw CSR_DLBOUND7LO, s0
-  ld   s0, OFFSET_REG_DLBOUND7HI(sp)
-  csrw CSR_DLBOUND7HI, s0
-  ld   s0, OFFSET_REG_DLBOUND8LO(sp)
-  csrw CSR_DLBOUND8LO, s0
-  ld   s0, OFFSET_REG_DLBOUND8HI(sp)
-  csrw CSR_DLBOUND8HI, s0
-  ld   s0, OFFSET_REG_DLBOUND9LO(sp)
-  csrw CSR_DLBOUND9LO, s0
-  ld   s0, OFFSET_REG_DLBOUND9HI(sp)
-  csrw CSR_DLBOUND9HI, s0
-  ld   s0, OFFSET_REG_DLBOUND10LO(sp)
-  csrw CSR_DLBOUND10LO, s0
-  ld   s0, OFFSET_REG_DLBOUND10HI(sp)
-  csrw CSR_DLBOUND10HI, s0
-  ld   s0, OFFSET_REG_DLBOUND11LO(sp)
-  csrw CSR_DLBOUND11LO, s0
-  ld   s0, OFFSET_REG_DLBOUND11HI(sp)
-  csrw CSR_DLBOUND11HI, s0
-  ld   s0, OFFSET_REG_DLBOUND12LO(sp)
-  csrw CSR_DLBOUND12LO, s0
-  ld   s0, OFFSET_REG_DLBOUND12HI(sp)
-  csrw CSR_DLBOUND12HI, s0
-  ld   s0, OFFSET_REG_DLBOUND13LO(sp)
-  csrw CSR_DLBOUND13LO, s0
-  ld   s0, OFFSET_REG_DLBOUND13HI(sp)
-  csrw CSR_DLBOUND13HI, s0
-  ld   s0, OFFSET_REG_DLBOUND14LO(sp)
-  csrw CSR_DLBOUND14LO, s0
-  ld   s0, OFFSET_REG_DLBOUND14HI(sp)
-  csrw CSR_DLBOUND14HI, s0
-  ld   s0, OFFSET_REG_DLBOUND15LO(sp)
-  csrw CSR_DLBOUND15LO, s0
-  ld   s0, OFFSET_REG_DLBOUND15HI(sp)
-  csrw CSR_DLBOUND15HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND0LO(sp)
+  # csrw CSR_DLBOUND0LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND0HI(sp)
+  # csrw CSR_DLBOUND0HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND1LO(sp)
+  # csrw CSR_DLBOUND1LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND1HI(sp)
+  # csrw CSR_DLBOUND1HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND2LO(sp)
+  # csrw CSR_DLBOUND2LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND2HI(sp)
+  # csrw CSR_DLBOUND2HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND3LO(sp)
+  # csrw CSR_DLBOUND3LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND3HI(sp)
+  # csrw CSR_DLBOUND3HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND4LO(sp)
+  # csrw CSR_DLBOUND4LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND4HI(sp)
+  # csrw CSR_DLBOUND4HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND5LO(sp)
+  # csrw CSR_DLBOUND5LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND5HI(sp)
+  # csrw CSR_DLBOUND5HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND6LO(sp)
+  # csrw CSR_DLBOUND6LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND6HI(sp)
+  # csrw CSR_DLBOUND6HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND7LO(sp)
+  # csrw CSR_DLBOUND7LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND7HI(sp)
+  # csrw CSR_DLBOUND7HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND8LO(sp)
+  # csrw CSR_DLBOUND8LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND8HI(sp)
+  # csrw CSR_DLBOUND8HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND9LO(sp)
+  # csrw CSR_DLBOUND9LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND9HI(sp)
+  # csrw CSR_DLBOUND9HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND10LO(sp)
+  # csrw CSR_DLBOUND10LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND10HI(sp)
+  # csrw CSR_DLBOUND10HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND11LO(sp)
+  # csrw CSR_DLBOUND11LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND11HI(sp)
+  # csrw CSR_DLBOUND11HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND12LO(sp)
+  # csrw CSR_DLBOUND12LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND12HI(sp)
+  # csrw CSR_DLBOUND12HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND13LO(sp)
+  # csrw CSR_DLBOUND13LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND13HI(sp)
+  # csrw CSR_DLBOUND13HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND14LO(sp)
+  # csrw CSR_DLBOUND14LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND14HI(sp)
+  # csrw CSR_DLBOUND14HI, s0
+  # ld   s0, OFFSET_REG_DLBOUND15LO(sp)
+  # csrw CSR_DLBOUND15LO, s0
+  # ld   s0, OFFSET_REG_DLBOUND15HI(sp)
+  # csrw CSR_DLBOUND15HI, s0
 
-  ld   s0, OFFSET_REG_DMAINCALL(sp)
-  csrw CSR_DMAINCALL, s0
-  ld   s0, OFFSET_REG_DRETURNPC(sp)
-  csrw CSR_DRETURNPC, s0
-  ld   s0, OFFSET_REG_DFZRETURN(sp)
-  csrw CSR_DFZRETURN, s0
+  # ld   s0, OFFSET_REG_DMAINCALL(sp)
+  # csrw CSR_DMAINCALL, s0
+  # ld   s0, OFFSET_REG_DRETURNPC(sp)
+  # csrw CSR_DRETURNPC, s0
+  # ld   s0, OFFSET_REG_DFZRETURN(sp)
+  # csrw CSR_DFZRETURN, s0
 
-  ld   s0, OFFSET_REG_DJBOUND0LO(sp)
-  csrw CSR_DJBOUND0LO, s0
-  ld   s0, OFFSET_REG_DJBOUND0HI(sp)
-  csrw CSR_DJBOUND0HI, s0
-  ld   s0, OFFSET_REG_DJBOUND1LO(sp)
-  csrw CSR_DJBOUND1LO, s0
-  ld   s0, OFFSET_REG_DJBOUND1HI(sp)
-  csrw CSR_DJBOUND1HI, s0
-  ld   s0, OFFSET_REG_DJBOUND2LO(sp)
-  csrw CSR_DJBOUND2LO, s0
-  ld   s0, OFFSET_REG_DJBOUND2HI(sp)
-  csrw CSR_DJBOUND2HI, s0
-  ld   s0, OFFSET_REG_DJBOUND3LO(sp)
-  csrw CSR_DJBOUND3LO, s0
-  ld   s0, OFFSET_REG_DJBOUND3HI(sp)
-  csrw CSR_DJBOUND3HI, s0
+  # ld   s0, OFFSET_REG_DJBOUND0LO(sp)
+  # csrw CSR_DJBOUND0LO, s0
+  # ld   s0, OFFSET_REG_DJBOUND0HI(sp)
+  # csrw CSR_DJBOUND0HI, s0
+  # ld   s0, OFFSET_REG_DJBOUND1LO(sp)
+  # csrw CSR_DJBOUND1LO, s0
+  # ld   s0, OFFSET_REG_DJBOUND1HI(sp)
+  # csrw CSR_DJBOUND1HI, s0
+  # ld   s0, OFFSET_REG_DJBOUND2LO(sp)
+  # csrw CSR_DJBOUND2LO, s0
+  # ld   s0, OFFSET_REG_DJBOUND2HI(sp)
+  # csrw CSR_DJBOUND2HI, s0
+  # ld   s0, OFFSET_REG_DJBOUND3LO(sp)
+  # csrw CSR_DJBOUND3LO, s0
+  # ld   s0, OFFSET_REG_DJBOUND3HI(sp)
+  # csrw CSR_DJBOUND3HI, s0
 
-  ld   s0, OFFSET_REG_DJCFG(sp)
-  csrw CSR_DJCFG, s0
+  # ld   s0, OFFSET_REG_DJCFG(sp)
+  # csrw CSR_DJCFG, s0
 
   ld x1,  OFFSET_REG_RA(sp)
   ld x3,  OFFSET_REG_GP(sp)

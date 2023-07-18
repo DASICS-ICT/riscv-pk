@@ -21,8 +21,8 @@ void ATTR_SMAIN_TEXT dasics_init_smaincall(uint64_t entry)
 
 uint64_t ATTR_SMAIN_TEXT dasics_smaincall(SmaincallTypes type, uint64_t arg0, uint64_t arg1, uint64_t arg2)
 {
-    uint64_t dasics_return_pc = kread_csr(0x8b1);
-    uint64_t dasics_free_zone_return_pc = kread_csr(0x8b2);
+    // uint64_t dasics_return_pc = kread_csr(0x8b1);
+    // uint64_t dasics_free_zone_return_pc = kread_csr(0x8b2);
 
     uint64_t retval = 0;
 
@@ -55,17 +55,17 @@ uint64_t ATTR_SMAIN_TEXT dasics_smaincall(SmaincallTypes type, uint64_t arg0, ui
             break;
     }
 
-    kwrite_csr(0x8b1, dasics_return_pc);
-    kwrite_csr(0x8b2, dasics_free_zone_return_pc);
+    // kwrite_csr(0x8b1, dasics_return_pc);
+    // kwrite_csr(0x8b2, dasics_free_zone_return_pc);
 
     // TODO: Use compiler to optimize such ugly code in the future ...
-    asm volatile("mv        a0, a5\n"\
-                 "ld        ra, 88(sp)\n"\
-                 "ld        s0, 80(sp)\n"\
-                 "addi      sp, sp, 96\n"\
-                 "ret\n"\
-                 //".word 0x0000f00b \n" /* dasicsret x0,  0, x1 in little endian */ 
-                 "nop");
+    // asm volatile("mv        a0, a5\n"\
+    //              "ld        ra, 88(sp)\n"\
+    //              "ld        s0, 80(sp)\n"\
+    //              "addi      sp, sp, 96\n"\
+    //              "ret\n"\
+    //              //".word 0x0000f00b \n" /* dasicsret x0,  0, x1 in little endian */ 
+    //              "nop");
 
     return retval;
 }

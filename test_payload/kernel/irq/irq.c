@@ -65,10 +65,10 @@ void init_exception()
     }
     irq_table[IRQC_S_TIMER] = handle_int;
     exc_table[EXCC_SYSCALL] = handle_syscall;
-    exc_table[EXCC_DASICS_SINSTR_FAULT] = handle_dasics;
-    exc_table[EXCC_DASICS_SLOAD_FAULT] = handle_dasics;
-    exc_table[EXCC_DASICS_SSTORE_FAULT] = handle_dasics;
-    delegate_dasics();
+    // exc_table[EXCC_DASICS_SINSTR_FAULT] = handle_dasics;
+    // exc_table[EXCC_DASICS_SLOAD_FAULT] = handle_dasics;
+    // exc_table[EXCC_DASICS_SSTORE_FAULT] = handle_dasics;
+    // delegate_dasics();
     setup_exception();
 }
 

@@ -56,16 +56,16 @@ static void delegate_traps()
     (1U << CAUSE_BREAKPOINT) |
     (1U << CAUSE_LOAD_PAGE_FAULT) |
     (1U << CAUSE_STORE_PAGE_FAULT) |
-    (1U << CAUSE_USER_ECALL) |
-    /* dasics exceptions */
-    (1U << CAUSE_DASICS_UINSTR_FAULT) |
-    (1U << CAUSE_DASICS_SINSTR_FAULT) |
-    (1U << CAUSE_DASICS_ULOAD_FAULT) |
-    (1U << CAUSE_DASICS_SLOAD_FAULT) |
-    (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_SSTORE_FAULT) |
-    (1U << CAUSE_DASICS_UECALL_FAULT) |
-    (1U << CAUSE_DASICS_SECALL_FAULT);
+    (1U << CAUSE_USER_ECALL);
+    // /* dasics exceptions */
+    // (1U << CAUSE_DASICS_UINSTR_FAULT) |
+    // (1U << CAUSE_DASICS_SINSTR_FAULT) |
+    // (1U << CAUSE_DASICS_ULOAD_FAULT) |
+    // (1U << CAUSE_DASICS_SLOAD_FAULT) |
+    // (1U << CAUSE_DASICS_USTORE_FAULT) |
+    // (1U << CAUSE_DASICS_SSTORE_FAULT) |
+    // (1U << CAUSE_DASICS_UECALL_FAULT) |
+    // (1U << CAUSE_DASICS_SECALL_FAULT);
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
@@ -75,13 +75,13 @@ static void delegate_traps()
   if(!supports_extension('N'))
 	  return;
 
-  uintptr_t uexceptions = 
-    (1U << CAUSE_DASICS_UINSTR_FAULT) |
-    (1U << CAUSE_DASICS_ULOAD_FAULT)  |
-    (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_UECALL_FAULT);
-  write_csr(sedeleg, uexceptions);
-  assert(read_csr(sedeleg) == uexceptions);
+  // uintptr_t uexceptions = 
+  //   (1U << CAUSE_DASICS_UINSTR_FAULT) |
+  //   (1U << CAUSE_DASICS_ULOAD_FAULT)  |
+  //   (1U << CAUSE_DASICS_USTORE_FAULT) |
+  //   (1U << CAUSE_DASICS_UECALL_FAULT);
+  // write_csr(sedeleg, uexceptions);
+  // assert(read_csr(sedeleg) == uexceptions);
 }
 
 static void dump_misa(uint32_t misa) {
@@ -145,7 +145,7 @@ static void memory_init()
 static void hart_init()
 {
   mstatus_init();
-  dasics_init();
+  //dasics_init();
   //fp_init();
 #ifndef BBL_BOOT_MACHINE
   delegate_traps();
