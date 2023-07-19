@@ -24,13 +24,18 @@ BBL_BIN = $(BBL_BUILD_PATH)/bbl.bin
 BBL_PAYLOAD = $(TEST_ELF)
 BBL_CONFIG = --host=riscv64-unknown-elf --with-payload=$(BBL_PAYLOAD) \
 						 --with-arch=rv64imac #--enable-logo #--enable-print-device-tree
+BBL_CFLAGS =
+ifeq ($(MAKECMDGOALS),qemu)
+BBL_CFLAGS += -D__QEMU__
+endif
+ifdef DSKIP
+BBL_CFLAGS += -DDASICS_SKIP_FAULT_INST
+endif
+
+BBL_ENV = CFLAGS="$(BBL_CFLAGS)"
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
 DTS = dts/system.dts
-
-ifeq ($(MAKECMDGOALS),qemu)
-BBL_ENV = CFLAGS=-D__QEMU__
-endif
 
 #--------------------------------------------------------------------
 # Linux variables
@@ -48,6 +53,9 @@ RFS_ENV = RISCV_ROOTFS_HOME=$(ROOTFS_PATH)
 
 TEST_PATH = $(abspath ./test_payload)
 TEST_ELF = $(TEST_PATH)/test_payload
+ifdef DSKIP
+TEST_ENV = DSKIP=y
+endif
 
 #--------------------------------------------------------------------
 # BBL rules
@@ -110,7 +118,7 @@ linux-clean:
 #--------------------------------------------------------------------
 
 $(TEST_ELF): | $(TEST_PATH)
-	$(MAKE) -C $(TEST_PATH)
+	$(TEST_ENV) $(MAKE) -C $(TEST_PATH)
 
 test: $(TEST_ELF)
 

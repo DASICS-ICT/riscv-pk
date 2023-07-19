@@ -21,6 +21,9 @@ INCLUDE_FLAG = \
 
 CFLAGS = -O0 -fno-builtin -nostdlib -T $(LDSCRIPT) -Wall -mcmodel=medany $(INCLUDE_FLAG) -nostdinc -g -fvar-tracking
 
+ifdef DSKIP
+CFLAGS += -DDASICS_SKIP_FAULT_INST
+endif
 
 default: $(ELF)
 
