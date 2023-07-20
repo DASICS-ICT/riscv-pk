@@ -12,17 +12,19 @@ static char ATTR_ULIB_DATA main_prompt2[128] = "[UMAIN]: DasicsLibCfg0: 0x%lx\n"
 static char ATTR_ULIB_DATA main_prompt3[128] = "[UMAIN]: DasicsReturnPC: 0x%lx\n";
 static char ATTR_ULIB_DATA main_prompt4[128] = "[UMAIN]: DasicsFreeZoneReturnPC: 0x%lx\n";
 
+void ATTR_UMAIN_TEXT dasics_main(void);
+
 //extern lib_printf(const char *fmt, void* func_name, void* main_call);
 
 // inline void lib_printf(const char *fmt, void* func_name, void* main_call){
 //     asm volatile (
-//         "auipc t0,  0\n"\
-//         "addi, t0,  t0  32\n"\
-//         "mv,   a0,  zero\n"\
-//         "addi, a0,  a0, 10\n"\
-//         "mv    a1,  t0\n"\
-//         "jal   ra,  %[main_call]\n"\
-//         "mv    a0,  %[fmt]\n"\
+//         "auipc t0,  0\n"
+//         "addi, t0,  t0  32\n"
+//         "mv,   a0,  zero\n"
+//         "addi, a0,  a0, 10\n"
+//         "mv    a1,  t0\n"
+//         "jal   ra,  %[main_call]\n"
+//         "mv    a0,  %[fmt]\n"
 //         "jal   ra,  %[func_name]"
 //         "nop"
 //         :
@@ -35,10 +37,10 @@ static void ATTR_ULIB_TEXT dasics_ulib2(void){}
 
 static void ATTR_ULIB_TEXT dasics_ulib1(void) {
     //lib_printf(pub_readonly,&printf, &dasics_umaincall);                 // That's ok
-    dasics_umaincall(UMAINCALL_PRINTF, pub_readonly,0,0);
+    dasics_umaincall(UMAINCALL_PRINTF, (uint64_t) pub_readonly,0,0);
     pub_readonly[15] = 'B';               // raise DasicsUStoreAccessFault (0x14)
     //lib_printf(pub_rwbuffer,&printf, &dasics_umaincall);                 // That's ok
-    dasics_umaincall(UMAINCALL_PRINTF, pub_rwbuffer,0,0);
+    dasics_umaincall(UMAINCALL_PRINTF, (uint64_t) pub_rwbuffer,0,0);
 
     char temp = secret[3];                // raise DasicsULoadAccessFault  (0x12)
     secret[3] = temp;                     // raise DasicsUStoreAccessFault (0x14)
@@ -52,12 +54,12 @@ static void ATTR_ULIB_TEXT dasics_ulib1(void) {
     pub_rwbuffer[21] = 'B';               // That's ok
     pub_rwbuffer[22] = 'B';               // That's ok
     //lib_printf(pub_rwbuffer,&printf, &dasics_umaincall);                 // That's ok
-    dasics_umaincall(UMAINCALL_PRINTF, pub_rwbuffer,0,0);
+    dasics_umaincall(UMAINCALL_PRINTF, (uint64_t) pub_rwbuffer,0,0);
 
 }
 
-extern main_printf(const char *fmt, void* func_name);
-extern main_call_lib(void* func_name);
+extern int main_printf(const char *fmt, void* func_name);
+extern void main_call_lib(void* func_name);
 
 void ATTR_UMAIN_TEXT dasics_main(void) {
     // Handlers of DasicsLibCfgs

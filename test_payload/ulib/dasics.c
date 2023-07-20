@@ -8,6 +8,9 @@ void ATTR_UMAIN_TEXT dasics_init_umaincall(uint64_t entry)
     write_csr(0x8b0, entry);  // DasicsMaincallEntry
 }
 
+
+extern int main_printf(const char *fmt, void* func_name);
+
 void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
     // Save some registers that should be saved by callees
     uint64_t dasics_return_pc = read_csr(0x8b1);            // DasicsReturnPC
@@ -99,11 +102,11 @@ uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, ui
             break;
         case UMAINCALL_PRINTF:
             // asm volatile (
-            //     "auipc t0,  0\n"\
-            //     "addi  t0,  t0,  20\n"\
-            //     "csrw  0x8b1,  t0\n"\
-            //     "mv    a0,  %[fmt]\n"\
-            //     "jal   ra,  %[func_name]\n"\
+            //     "auipc t0,  0\n"
+            //     "addi  t0,  t0,  20\n"
+            //     "csrw  0x8b1,  t0\n"
+            //     "mv    a0,  %[fmt]\n"
+            //     "jal   ra,  %[func_name]\n"
             //     "nop"
             //     :
             //     :[fmt]"r"((void*)arg0), [func_name]"i"(&printf)
