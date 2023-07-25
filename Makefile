@@ -19,11 +19,10 @@ BBL_BUILD_MAKEFILE = $(BBL_BUILD_PATH)/Makefile
 BBL_ELF_BUILD = $(BBL_BUILD_PATH)/bbl
 BBL_BIN = $(BBL_BUILD_PATH)/bbl.bin
 
-#BBL_PAYLOAD = $(LINUX_ELF)
+BBL_PAYLOAD = $(LINUX_ELF)
 #BBL_PAYLOAD = dummy_payload
-BBL_PAYLOAD = $(TEST_ELF)
 BBL_CONFIG = --host=riscv64-unknown-elf --with-payload=$(BBL_PAYLOAD) \
-						 --with-arch=rv64imac #--enable-logo #--enable-print-device-tree
+						 --with-arch=rv64imac --enable-logo #--enable-print-device-tree
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
 DTS = dts/system.dts
@@ -41,13 +40,6 @@ LINUX_ELF = $(LINUX_REPO_PATH)/vmlinux
 
 ROOTFS_PATH = $(abspath ../riscv-rootfs)
 RFS_ENV = RISCV_ROOTFS_HOME=$(ROOTFS_PATH)
-
-#--------------------------------------------------------------------
-# Test payload variables
-#--------------------------------------------------------------------
-
-TEST_PATH = $(abspath ./test_payload)
-TEST_ELF = $(TEST_PATH)/test_payload
 
 #--------------------------------------------------------------------
 # BBL rules
@@ -106,20 +98,6 @@ linux-clean:
 
 
 #--------------------------------------------------------------------
-# Test payload rules
-#--------------------------------------------------------------------
-
-$(TEST_ELF): | $(TEST_PATH)
-	$(MAKE) -C $(TEST_PATH)
-
-test: $(TEST_ELF)
-
-test-clean:
-	$(MAKE) clean -C $(TEST_PATH)
-
-.PHONY: test test-clean $(TEST_ELF)
-
-#--------------------------------------------------------------------
 # Top-level rules
 #--------------------------------------------------------------------
 
@@ -134,7 +112,7 @@ noop: bbl
 qemu: bbl
 	qemu-system-riscv64 -nographic -kernel $(BBL_ELF_BUILD) -machine virt
 
-clean: bbl-clean test-clean #linux-clean
+clean: bbl-clean #linux-clean
 #	-$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH) clean
 
 .PHONY: default run clean
