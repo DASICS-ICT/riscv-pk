@@ -46,7 +46,7 @@ static void ATTR_ULIB_TEXT dasics_ulib1(void) {
     secret[3] = temp;                     // raise DasicsUStoreAccessFault (0x14)
 
     dasics_main();                // raise DasicsUInstrAccessFault (0x10)
-    dasics_ulib2();                 // raise DasicsUInstrAccessFault (0x10)
+    dasics_ulib2();                 // OK since we granted all ULIB
     // sys_write(pub_rwbuffer);              // raise DasicsUInstrAccessFault (0x10)
     // printf(secret);                       // raise DasicsULoadAccessFault * 100
 
@@ -81,9 +81,13 @@ void ATTR_UMAIN_TEXT dasics_main(void) {
     idx1 = dasics_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (uint64_t)pub_rwbuffer, (uint64_t)(pub_rwbuffer + 128));
     idx2 = dasics_libcfg_alloc(DASICS_LIBCFG_V                                    , (uint64_t)secret,       (uint64_t)(      secret + 128));
 
+    extern char __ULIB_TEXT_BEGIN__, __ULIB_TEXT_END__;
+    idx3 = dasics_jumpcfg_alloc((uint64_t)&__ULIB_TEXT_BEGIN__, (uint64_t)&__ULIB_TEXT_END__);
+
     // Jump to lib function
     //dasics_ulib1();
     main_call_lib(&dasics_ulib1);
+    dasics_jumpcfg_free(idx3);
 
     // Print DasicsLibCfg0 and DasicsLibCfg1 csr value
     idx3 = dasics_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt2, (uint64_t)(main_prompt2 + 128));

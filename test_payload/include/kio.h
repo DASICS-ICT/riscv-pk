@@ -4,6 +4,6 @@
 #include <kattr.h>
 
 void port_write(char *str);
-int ATTR_SFREEZONE_TEXT printk(const char *fmt, ...);
+int printk(const char *fmt, ...);
 
 #endif

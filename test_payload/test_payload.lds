@@ -33,7 +33,9 @@ SECTIONS
     __SFREEZONE_TEXT_BEGIN__ = .;
     *(.sfreezonetext)
     __SFREEZONE_TEXT_END__ = .;
+    __ULIB_TEXT_BEGIN__ = .;
     *(.ulibtext)
+    __ULIB_TEXT_END__ = .;
     __UFREEZONE_TEXT_BEGIN__ = .;
     *(.ufreezonetext)
     __UFREEZONE_TEXT_END__ = .;

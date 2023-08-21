@@ -98,7 +98,6 @@ static void init_dasics(void)
     //     (ptr_t)&__SFREEZONE_DATA_BEGIN__, (ptr_t)&__SFREEZONE_DATA_END__, (ptr_t)INIT_KERNEL_STACK, (ptr_t)(INIT_KERNEL_STACK + PAGE_SIZE));
 }
 
-extern int main_printk(const char *fmt, void* func_name);
 
 int main()
 {
@@ -110,8 +109,7 @@ int main()
     // init DASICS protection
     init_dasics();
 
-    main_printk("> [INIT] Dasics mechanism initialized successfully.\n\r", &printk);
-    //printk("> [INIT] Dasics mechanism initialized successfully.\n\r");
+    printk("> [INIT] Dasics mechanism initialized successfully.\n\r");
 
     // read CPU frequency
     // time_base = sbi_read_fdt(TIMEBASE);
@@ -124,12 +122,12 @@ int main()
     init_exception();
 
     //printk("> [INIT] Interrupt processing initialized.\n\r");
-    main_printk("> [INIT] Interrupt processing initialized.\n\r", &printk);
+    printk("> [INIT] Interrupt processing initialized.\n\r");
 
     // init system call table
     init_syscall();
     //printk("> [INIT] Syscall initialized.\n\r");
-    main_printk("> [INIT] Syscall initialized.\n\r", &printk);
+    printk("> [INIT] Syscall initialized.\n\r");
 
     // init screen
     // init_screen();

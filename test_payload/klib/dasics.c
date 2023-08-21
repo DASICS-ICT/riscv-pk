@@ -250,7 +250,7 @@ int32_t ATTR_SMAIN_TEXT dasics_jumpcfg_kfree(int32_t idx) {
     return 0;
 }
 
-uint32_t dasics_jumpcfg_get(int32_t idx) {
+uint32_t dasics_jumpcfg_kget(int32_t idx) {
     if (idx < 0 || idx >= DASICS_JUMPCFG_WIDTH) {
         return -1;
     }

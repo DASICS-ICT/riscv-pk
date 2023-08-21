@@ -245,3 +245,58 @@ uint32_t dasics_libcfg_get(int32_t idx) {
     uint64_t libcfg = read_csr(0x880);  // DasicsLibCfg
     return (libcfg >> (idx * step)) & DASICS_LIBCFG_MASK;
 }
+
+int32_t ATTR_UMAIN_TEXT dasics_jumpcfg_alloc(uint64_t lo, uint64_t hi)
+{
+    uint64_t jumpcfg = read_csr(0x8c8);    // DasicsJumpCfg
+    int32_t max_cfgs = DASICS_JUMPCFG_WIDTH;
+    int32_t step = 16;
+
+    for (int32_t idx = 0; idx < max_cfgs; ++idx) {
+        uint64_t curr_cfg = (jumpcfg >> (idx * step)) & DASICS_JUMPCFG_MASK;
+        if ((curr_cfg & DASICS_JUMPCFG_V) == 0) // found available cfg
+        {
+            // Write DASICS jump boundary CSRs
+            switch (idx) {
+                case 0:
+                    write_csr(0x8c0, lo);  // DasicsJumpBound0Lo
+                    write_csr(0x8c1, hi);  // DasicsJumpBound0Hi
+                    break;
+                case 1:
+                    write_csr(0x8c2, lo);  // DasicsJumpBound1Lo
+                    write_csr(0x8c3, hi);  // DasicsJumpBound1Hi
+                    break;
+                case 2:
+                    write_csr(0x8c4, lo);  // DasicsJumpBound2Lo
+                    write_csr(0x8c5, hi);  // DasicsJumpBound2Hi
+                    break;
+                case 3:
+                    write_csr(0x8c6, lo);  // DasicsJumpBound3Lo
+                    write_csr(0x8c7, hi);  // DasicsJumpBound3Hi
+                    break;
+                default:
+                    break;
+            }
+
+            jumpcfg &= ~(DASICS_JUMPCFG_MASK << (idx * step));
+            jumpcfg |= DASICS_JUMPCFG_V << (idx * step);
+            write_csr(0x8c8, jumpcfg); // DasicsJumpCfg
+
+            return idx;
+        }
+    }
+
+    return -1;
+}
+
+int32_t ATTR_UMAIN_TEXT dasics_jumpcfg_free(int32_t idx) {
+    if (idx < 0 || idx >= DASICS_JUMPCFG_WIDTH) {
+        return -1;
+    }
+
+    int32_t step = 16;
+    uint64_t jumpcfg = read_csr(0x8c8);    // DasicsJumpCfg
+    jumpcfg &= ~(DASICS_JUMPCFG_V << (idx * step));
+    write_csr(0x8c8, jumpcfg); // DasicsJumpCfg
+    return 0;
+}
