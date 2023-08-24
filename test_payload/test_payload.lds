@@ -2,10 +2,10 @@
 OUTPUT_FORMAT("elf64-littleriscv", "elf64-littleriscv",
               "elf64-littleriscv")
 OUTPUT_ARCH("riscv")
-ENTRY(_start)
+ENTRY(_boot)
 SECTIONS
 {
-  . = 0x80200000;
+  . = 0xffffffc080200000;
   .text           :
   {
     _ftext = . ;
@@ -161,8 +161,6 @@ SECTIONS
   . = SEGMENT_START("ldata-segment", .);
   . = ALIGN(64 / 8);
   __BSS_END__ = .;
-    __global_pointer$ = MIN(__SDATA_BEGIN__ + 0x800,
-                            MAX(__DATA_BEGIN__ + 0x800, __BSS_END__ - 0x800));
   /* DASICS lib and freezone data section */
   .libdata        :
   {

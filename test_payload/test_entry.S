@@ -7,7 +7,6 @@
 #include <arch/asm.h>
 #include <arch/csr.h>
 
-.section ".entry_function","ax"
 ENTRY(_start)
   /* Mask all interrupts */
   csrw CSR_SIE, zero
@@ -21,10 +20,10 @@ ENTRY(_start)
   csrc sstatus, t0
 
   /* Load the global pointer */
-  .option push
-  .option norelax
-  la gp, __global_pointer$
-  .option pop
+  # .option push
+  # .option norelax
+  # la gp, __global_pointer$
+  # .option pop
 
   /* Clear BSS for flat non-ELF images */
 

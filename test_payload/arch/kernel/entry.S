@@ -454,10 +454,10 @@ ENTRY(exception_handler_entry)
   csrw CSR_SSCRATCH, x0
 
   /* Load the global pointer */
-  .option push
-  .option norelax
-  la gp, __global_pointer$
-  .option pop
+  # .option push
+  # .option norelax
+  # la gp, __global_pointer$
+  # .option pop
 
   la ra, ret_from_exception
 

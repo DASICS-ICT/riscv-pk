@@ -15,6 +15,7 @@ LDSCRIPT = $(NAME).lds
 
 INCLUDE_FLAG = \
   -Iinclude \
+  -Iinclude/arch \
   -Itest \
   -Iulib/include \
   -I../machine \

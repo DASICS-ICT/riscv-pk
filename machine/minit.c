@@ -56,7 +56,9 @@ static void delegate_traps()
     (1U << CAUSE_BREAKPOINT) |
     (1U << CAUSE_LOAD_PAGE_FAULT) |
     (1U << CAUSE_STORE_PAGE_FAULT) |
-    (1U << CAUSE_USER_ECALL);
+    (1U << CAUSE_USER_ECALL);// |
+    // (1U << 16) | (1U << 17) |
+    // (1U << 18) | (1U << 19);
     // /* dasics exceptions */
     // (1U << CAUSE_DASICS_UINSTR_FAULT) |
     // (1U << CAUSE_DASICS_SINSTR_FAULT) |

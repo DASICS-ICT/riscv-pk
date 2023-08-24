@@ -10,7 +10,7 @@
 #include "arch/csr.h"
 
 extern void ret_from_exception();
-extern void __global_pointer$();
+// extern void __global_pointer$();
 
 pcb_t pcb[NUM_MAX_TASK];
 const ptr_t pid0_stack = INIT_KERNEL_STACK + PAGE_SIZE;
@@ -110,7 +110,7 @@ static void init_pcb_stack(
     }
     // ra = ret_from_exception
     pt_regs->regs[2] = (reg_t)user_stack;
-    pt_regs->regs[3] = (reg_t)__global_pointer$;
+    // pt_regs->regs[3] = (reg_t)__global_pointer$;
     pt_regs->regs[10] = (reg_t)arg;
     pt_regs->sepc    = entry_point;
     pt_regs->sstatus = 0;

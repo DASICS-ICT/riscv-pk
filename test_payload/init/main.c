@@ -11,13 +11,16 @@
 #include "arch/csr.h"
 #include "kdasics.h"
 #include <kassert.h>
+#include <pgtable.h>
 
 extern void ret_from_exception();
-extern void __global_pointer$();
+// extern void __global_pointer$();
 
 static char ATTR_SLIB_DATA secret[100] = "[SLIB1]: It's the secret!\n";
 static char ATTR_SLIB_DATA pub_readonly[100] = "[SLIB1]: Enter dasics_slib1 ...\n";
 static char ATTR_SLIB_DATA pub_rwbuffer[100] = "[SLIB1]: It's public rw buffer!\n";
+
+static char __attribute__((align(2 << 20))) __attribute__((section(".data"))) array[2 << 22];  // 2MB * 4
 
 static void ATTR_SLIB_TEXT dasics_slib1(void)
 {
@@ -102,6 +105,7 @@ extern main_printk(const char *fmt, void* func_name);
 
 int main()
 {
+    // sbi_console_putstr("[DEBUG]\n");
 
     // init Process Control Block
     init_pcb();
@@ -130,6 +134,42 @@ int main()
     init_syscall();
     printk("> [INIT] Syscall initialized.\n\r");
     //main_printk("> [INIT] Syscall initialized.\n\r", &printk);
+
+    printk("[DEBUG] &array[2 << 21] = 0x%lx\n", &array[2 << 21]);
+
+    // Simple MPK test
+    // char array[2097152 << 1];  // 2MB * 2
+    PTE *ptep1 = get_PTE_of(&array[2 << 21], PGDIR_PA);
+    // PTE *ptep2 = get_PTE_of(&array[2 << 20 + 4096], PGDIR_PA);
+    // printk("[DEBUG] ptep1 = 0x%lx, ptep2 = 0x%lx\n", ptep1, ptep2);
+    // printk("[DEBUG] *ptep1 = 0x%lx, *ptep2 = 0x%lx\n", *ptep1, *ptep2);
+    set_pkey(ptep1, 1);
+    // set_pkey(ptep2, 2);
+
+    asm volatile ("li t0, 0x2\n"\
+                  "csrw 0x9c0, t0");  // Write SPKCTL
+    asm volatile("li t0, 0x4\n"\
+                 "csrw 0x9c1, t0");  // Write SPKRS
+    local_flush_tlb_page(&array[2 << 21]);  // Flush TLB
+
+    // char __attribute__((unused)) temp1 = pub_readonly[0];  // ok
+    // pub_rwbuffer[0] = '@';  // ok
+    // printk("[DEBUG] pub_rwbuffer: %s\n", pub_rwbuffer);
+    // printk("[DEBUG] &array[4100] = 0x%lx\n", &array[4100]);
+
+    asm volatile("li a0,52\n"\
+                 "li a7, 1\n"\
+                 "ecall");
+
+    char __attribute__((unused)) temp = array[2 << 21];  // MPK load fault
+    array[2 << 21] = 1;  // MPK store fault
+
+    asm volatile("li a0,52\n"\
+                 "li a7, 1\n"\
+                 "ecall");
+
+    printk("WHILE LOOP!\n");
+    while (1);
 
     // init screen
     // init_screen();
