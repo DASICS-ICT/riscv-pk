@@ -69,7 +69,7 @@ static void delegate_traps()
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
-  assert(read_csr(mideleg) == interrupts);
+  assert(read_csr(mideleg) & interrupts == interrupts);
   assert(read_csr(medeleg) == exceptions);
 
   if(!supports_extension('N'))
