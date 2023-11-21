@@ -29,6 +29,22 @@ trap_table:
   .dc.a __trap_from_machine_mode
   .dc.a bad_trap
   .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
   .dc.a bad_trap  /* PKU Load Page Fault */
   .dc.a bad_trap  /* PKU Store Page Fault */
   .dc.a bad_trap  /* PKS Load Page Fault */
