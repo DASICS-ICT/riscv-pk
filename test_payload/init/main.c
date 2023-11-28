@@ -147,9 +147,9 @@ int main()
     // set_pkey(ptep2, 2);
 
     asm volatile ("li t0, 0x2\n"\
-                  "csrw 0x9c0, t0");  // Write SPKCTL
-    asm volatile("li t0, 0x4\n"\
-                 "csrw 0x9c1, t0");  // Write SPKRS
+                  "csrw 0x9d0, t0");  // Write SPKCTL
+    asm volatile("li t0, 0x8\n"\
+                 "csrw 0x9d1, t0");  // Write SPKRS
     local_flush_tlb_page(&array[2 << 21]);  // Flush TLB
 
     // char __attribute__((unused)) temp1 = pub_readonly[0];  // ok
@@ -161,7 +161,7 @@ int main()
                  "li a7, 1\n"\
                  "ecall");
 
-    char __attribute__((unused)) temp = array[2 << 21];  // MPK load fault
+    char __attribute__((unused)) volatile temp = array[2 << 21];  // MPK load fault
     array[2 << 21] = 1;  // MPK store fault
 
     asm volatile("li a0,52\n"\
