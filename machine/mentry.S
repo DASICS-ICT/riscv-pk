@@ -45,6 +45,10 @@ trap_table:
   .dc.a dasics_trap  # 29, dasicsSStoreFault
   .dc.a bad_trap  # 30, dasicsUEcallFault
   .dc.a bad_trap  # 31, dasicsSEcallFault
+  .dc.a bad_trap  /* PKU Load Page Fault */
+  .dc.a bad_trap  /* PKU Store Page Fault */
+  .dc.a bad_trap  /* PKS Load Page Fault */
+  .dc.a bad_trap  /* PKS Store Page Fault */
 
   .option norvc
   .section .text.init,"ax",@progbits
