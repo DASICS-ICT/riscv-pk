@@ -2,7 +2,7 @@
 # Build tools
 #--------------------------------------------------------------------
 
-RISCV_PREFIX=riscv64-unknown-elf-
+RISCV_PREFIX=riscv64-unknown-linux-gnu-
 CC = $(RISCV_PREFIX)gcc
 LD = $(RISCV_PREFIX)ld
 RISCV_COPY = $(RISCV_PREFIX)objcopy
@@ -22,8 +22,8 @@ BBL_BIN = $(BBL_BUILD_PATH)/bbl.bin
 #BBL_PAYLOAD = $(LINUX_ELF)
 #BBL_PAYLOAD = dummy_payload
 BBL_PAYLOAD = $(TEST_ELF)
-BBL_CONFIG = --host=riscv64-unknown-elf --with-payload=$(BBL_PAYLOAD) \
-						 --with-arch=rv64imac #--enable-logo #--enable-print-device-tree
+BBL_CONFIG = --host=riscv64-unknown-linux-gnu --with-payload=$(BBL_PAYLOAD) \
+						 --with-arch=rv64gc_zifencei #--enable-logo #--enable-print-device-tree
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
 DTS = dts/system.dts
