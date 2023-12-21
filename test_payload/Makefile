@@ -1,6 +1,6 @@
 NAME = test_payload
 ELF = $(NAME)
-HOST ?= riscv64-unknown-linux-gnu
+HOST ?= riscv64-unknown-elf
 CC = $(HOST)-gcc
 OBJDUMP = $(HOST)-objdump
 
