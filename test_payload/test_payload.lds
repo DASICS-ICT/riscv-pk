@@ -27,7 +27,7 @@ SECTIONS
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
   /* DASICS lib and freezone text section */
-  .libtext        :
+  .libtext ALIGN(8) :
   {
     *(.slibtext)
     __SFREEZONE_TEXT_BEGIN__ = .;
