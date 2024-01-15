@@ -12,6 +12,7 @@ static char ATTR_ULIB_DATA main_prompt1[128] = "[UMAIN]: Ready to enter dasics_u
 static char ATTR_ULIB_DATA main_prompt2[128] = "[UMAIN]: DasicsLibCfg0: 0x%lx\n";
 static char ATTR_ULIB_DATA main_prompt3[128] = "[UMAIN]: DasicsReturnPC: 0x%lx\n";
 static char ATTR_ULIB_DATA main_prompt4[128] = "[UMAIN]: DasicsFreeZoneReturnPC: 0x%lx\n";
+static char ATTR_ULIB_DATA main_prompt5[64] = "[UMAIN] Successfully returned.\n";
 
 #define TRAIN_TIMES 6 // assumption is that you have a 2 bit counter in the predictor
 #define ROUNDS 1 // run the train + attack sequence X amount of times (for redundancy)
@@ -207,6 +208,10 @@ void ATTR_UMAIN_TEXT spectre_attack(void) {
         ++attackIdx;
     }
 
+    dasics_libcfg_free(idx0);
+    dasics_libcfg_free(idx1);
+    dasics_jumpcfg_free(idx2);
+
     return;
 }
 
@@ -226,6 +231,11 @@ void ATTR_UMAIN_TEXT dasics_main(void) {
     dasics_libcfg_free(idx0);
 
     spectre_attack();
+
+    idx0 = dasics_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt5, (uint64_t)(main_prompt5 + 64));
+    main_printf(main_prompt5, &printf);
+    dasics_libcfg_free(idx0);
+
     sys_exit();
 
     // Allocate libcfg before calling lib function
