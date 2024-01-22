@@ -1,5 +1,5 @@
 /dts-v1/;
-/include/ "platform.dtsi"
+/include/ "zynq-standalone.dtsi"
 
 / {
 	#address-cells = <2>;

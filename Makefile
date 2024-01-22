@@ -21,8 +21,13 @@ BBL_BIN = $(BBL_BUILD_PATH)/bbl.bin
 
 BBL_PAYLOAD = $(LINUX_ELF)
 #BBL_PAYLOAD = dummy_payload
-BBL_CONFIG = --host=riscv64-unknown-elf --with-payload=$(BBL_PAYLOAD) \
-						 --with-arch=rv64imac --enable-logo #--enable-print-device-tree
+BBL_CONFIG = --host=riscv64-unknown-elf \
+	     --with-payload=$(BBL_PAYLOAD) \
+	     --with-arch=rv64imac \
+	     --with-mem-start=0x50000000 \
+	     --enable-logo \
+		 --enable-fp-emulation \
+	     #--enable-print-device-tree
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
 DTS = dts/system.dts
@@ -30,6 +35,8 @@ DTS = dts/system.dts
 ifeq ($(MAKECMDGOALS),qemu)
 BBL_ENV = CFLAGS=-D__QEMU__
 endif
+
+CFLAGS += -g
 
 #--------------------------------------------------------------------
 # Linux variables
@@ -88,6 +95,7 @@ linux: $(LINUX_ELF)
 $(LINUX_ELF): | $(LINUX_REPO_PATH) $(ROOTFS_PATH)
 	$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH)
 	$(RFS_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv vmlinux
+	mkdir -p $(BBL_BUILD_PATH)
 	$(RISCV_DUMP) -d $(LINUX_ELF) > $(BBL_BUILD_PATH)/vmlinux.txt
 
 linux-clean:
@@ -106,11 +114,11 @@ default: bbl
 nemu: bbl
 	$(MAKE) -C $(NEMU_HOME) ISA=riscv64 run ARGS="-b $(abspath $(BBL_BIN))"
 
-noop: bbl
-	$(MAKE) -C $(NOOP_HOME) emu IMAGE="$(abspath $(BBL_BIN))"
+nutshell: bbl
+	$(MAKE) -C $(NUTSHELL_HOME) emu IMAGE="$(abspath $(BBL_BIN))"
 
 qemu: bbl
-	qemu-system-riscv64 -nographic -kernel $(BBL_ELF_BUILD) -machine virt
+#	qemu-system-riscv64 -nographic -kernel $(BBL_ELF_BUILD) -machine virt
 
 clean: bbl-clean #linux-clean
 #	-$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH) clean

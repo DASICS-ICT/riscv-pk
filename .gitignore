@@ -10,3 +10,5 @@ autom4te.cache/
 *.swp
 *~
 .vscode/
+*.mk
+config*
