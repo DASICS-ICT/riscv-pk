@@ -1034,15 +1034,18 @@
 #define CAUSE_STORE_PAGE_FAULT 0xf
 
 /* dasics faults */
-#define CAUSE_DASICS_UFETCH_FAULT   0x18
-#define CAUSE_DASICS_SFETCH_FAULT   0x19
-#define CAUSE_DASICS_ULOAD_FAULT   0x1a
-#define CAUSE_DASICS_SLOAD_FAULT   0x1b
-#define CAUSE_DASICS_USTORE_FAULT  0x1c
-#define CAUSE_DASICS_SSTORE_FAULT  0x1d
-#define CAUSE_DASICS_UECALL_FAULT  0x1e
-#define CAUSE_DASICS_SECALL_FAULT  0x1f
+// #define CAUSE_DASICS_UFETCH_FAULT   0x18
+// #define CAUSE_DASICS_SFETCH_FAULT   0x19
+// #define CAUSE_DASICS_ULOAD_FAULT   0x1a
+// #define CAUSE_DASICS_SLOAD_FAULT   0x1b
+// #define CAUSE_DASICS_USTORE_FAULT  0x1c
+// #define CAUSE_DASICS_SSTORE_FAULT  0x1d
+// #define CAUSE_DASICS_UECALL_FAULT  0x1e
+// #define CAUSE_DASICS_SECALL_FAULT  0x1f
 
+#define FDIUJumpFault              0x18
+#define FDIULoadAccessFault        0x19
+#define FDIUStoreAccessFault       0x1a
 
 #endif
 #ifdef DECLARE_INSN

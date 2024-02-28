@@ -58,30 +58,33 @@ static void delegate_traps()
     (1U << CAUSE_STORE_PAGE_FAULT) |
     (1U << CAUSE_USER_ECALL) |
      /* dasics exceptions */
-    (1U << CAUSE_DASICS_UFETCH_FAULT) |
-    (1U << CAUSE_DASICS_SFETCH_FAULT) |
-    (1U << CAUSE_DASICS_ULOAD_FAULT) |
-    (1U << CAUSE_DASICS_SLOAD_FAULT) |
-    (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_SSTORE_FAULT) |
-    (1U << CAUSE_DASICS_UECALL_FAULT) |
-    (1U << CAUSE_DASICS_SECALL_FAULT);
+    (1U << FDIUJumpFault) |
+    (1U << FDIULoadAccessFault) |
+    (1U << FDIUStoreAccessFault);
+    // (1U << CAUSE_DASICS_UFETCH_FAULT) |
+    // (1U << CAUSE_DASICS_SFETCH_FAULT) |
+    // (1U << CAUSE_DASICS_ULOAD_FAULT) |
+    // (1U << CAUSE_DASICS_SLOAD_FAULT) |
+    // (1U << CAUSE_DASICS_USTORE_FAULT) |
+    // (1U << CAUSE_DASICS_SSTORE_FAULT) |
+    // (1U << CAUSE_DASICS_UECALL_FAULT) |
+    // (1U << CAUSE_DASICS_SECALL_FAULT);
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
   assert((read_csr(mideleg) & interrupts) == interrupts);
   assert(read_csr(medeleg) == exceptions);
 
-  if(!supports_extension('N'))
-	return;
+  // if(!supports_extension('N'))
+	// return;
 
-  uintptr_t uexceptions = 
-    (1U << CAUSE_DASICS_UFETCH_FAULT) |
-    (1U << CAUSE_DASICS_ULOAD_FAULT)  |
-    (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_UECALL_FAULT);
-  write_csr(sedeleg, uexceptions);
-  assert(read_csr(sedeleg) == uexceptions);
+  // uintptr_t uexceptions = 
+  //   (1U << CAUSE_DASICS_UFETCH_FAULT) |
+  //   (1U << CAUSE_DASICS_ULOAD_FAULT)  |
+  //   (1U << CAUSE_DASICS_USTORE_FAULT) |
+  //   (1U << CAUSE_DASICS_UECALL_FAULT);
+  // write_csr(sedeleg, uexceptions);
+  // assert(read_csr(sedeleg) == uexceptions);
 
 }
 
