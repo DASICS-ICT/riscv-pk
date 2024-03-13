@@ -1,9 +1,9 @@
 //MAIN FUNCTION
 
 .section .umaintext
-.global dasics_maincall
+.global dasics_umain_libcall
 // arg0, arg1, arg2, arg3, dest_addr
-dasics_maincall:
+dasics_umain_libcall:
     addi   sp, sp, -8
     sd     ra, 0(sp)
     .word 0x0007108b    // dasicscall.jr ra, a4
@@ -14,10 +14,10 @@ dasics_maincall:
 //ULIB FUNCTION
 
 .section .ulib1text
-.global dasics_ulibcall
+.global dasics_ulib_libcall
     
 // arg0, arg1, arg2, arg3, dest_addr
-dasics_ulibcall:
+dasics_ulib_libcall:
     addi   sp, sp, -8
     sd     ra, 0(sp)
     .word 0x0007108b    // dasicscall.jr ra, a4

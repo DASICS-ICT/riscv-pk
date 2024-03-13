@@ -86,7 +86,7 @@ static void ATTR_ULIB1_TEXT dasics_ulib1(void) {
     int32_t idx_ulib2 = dasics_ulib_jumpcfg_alloc((uint64_t)&__ULIB2_TEXT_BEGIN__, (uint64_t)&__ULIB2_TEXT_END__);
 
     //CALL ULIB2
-    dasics_ulibcall_no_args(&dasics_ulib2);
+    dasics_ulib_libcall_no_args(&dasics_ulib2);
 
     // sys_write(pub_rwbuffer);              // raise DasicsUInstrAccessFault (0x10)
     // printf(secret);                       // raise DasicsULoadAccessFault * 100
@@ -119,45 +119,45 @@ void ATTR_UMAIN_TEXT dasics_main(void) {
     //printf("Hello, this is main function!\n");
 
     // Print main_prompt1
-    idx0 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt1, (uint64_t)(main_prompt1 + 128));
+    idx0 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt1, (uint64_t)(main_prompt1 + 128));
     main_printf(main_prompt1);
-    dasics_main_libcfg_free(idx0);
+    dasics_umain_libcfg_free(idx0);
 
     // Allocate libcfg before calling lib function
-    idx0 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R                  , (uint64_t)ulib1_readonly, (uint64_t)(ulib1_readonly + 128));
-    idx1 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (uint64_t)ulib1_rwbuffer, (uint64_t)(ulib1_rwbuffer + 128));
-    idx2 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V                                    , (uint64_t)secret,       (uint64_t)(      secret + 128));
-    idx4 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (uint64_t)ulib2_rwbuffer, (uint64_t)(ulib2_rwbuffer + 128));
+    idx0 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R                  , (uint64_t)ulib1_readonly, (uint64_t)(ulib1_readonly + 128));
+    idx1 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (uint64_t)ulib1_rwbuffer, (uint64_t)(ulib1_rwbuffer + 128));
+    idx2 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V                                    , (uint64_t)secret,       (uint64_t)(      secret + 128));
+    idx4 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (uint64_t)ulib2_rwbuffer, (uint64_t)(ulib2_rwbuffer + 128));
 
 
     extern char __ULIB1_TEXT_BEGIN__, __ULIB1_TEXT_END__;
-    idx3 = dasics_main_jumpcfg_alloc((uint64_t)&__ULIB1_TEXT_BEGIN__, (uint64_t)&__ULIB1_TEXT_END__);
+    idx3 = dasics_umain_jumpcfg_alloc((uint64_t)&__ULIB1_TEXT_BEGIN__, (uint64_t)&__ULIB1_TEXT_END__);
 
     // Jump to lib function
     //dasics_ulib1();
-    dasics_maincall_no_args(&dasics_ulib1);
-    dasics_main_jumpcfg_free(idx3);
+    dasics_umain_libcall_no_args(&dasics_ulib1);
+    dasics_umain_jumpcfg_free(idx3);
 
-    dasics_main_libcfg_free(idx4);
+    dasics_umain_libcfg_free(idx4);
     
     // Print DasicsLibCfg0 and DasicsLibCfg1 csr value
-    idx3 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt2, (uint64_t)(main_prompt2 + 128));
+    idx3 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt2, (uint64_t)(main_prompt2 + 128));
     //main_printf(main_prompt2, read_csr(0x880));
-    dasics_main_libcfg_free(idx3);
+    dasics_umain_libcfg_free(idx3);
 
     // Free those used libcfg via handlers
-    dasics_main_libcfg_free(idx2);
-    dasics_main_libcfg_free(idx1);
-    dasics_main_libcfg_free(idx0);
+    dasics_umain_libcfg_free(idx2);
+    dasics_umain_libcfg_free(idx1);
+    dasics_umain_libcfg_free(idx0);
 
     // Print values of DasicsReturnPC and DasicsFreeZoneReturnPC
-    idx0 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt3, (uint64_t)(main_prompt3 + 128));
+    idx0 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt3, (uint64_t)(main_prompt3 + 128));
     //printf(main_prompt3, read_csr(0x8b1));
-    dasics_main_libcfg_free(idx0);
+    dasics_umain_libcfg_free(idx0);
 
-    idx0 = dasics_main_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt4, (uint64_t)(main_prompt4 + 128));
+    idx0 = dasics_umain_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R, (uint64_t)main_prompt4, (uint64_t)(main_prompt4 + 128));
     //printf(main_prompt4, read_csr(0x8b2));
-    dasics_main_libcfg_free(idx0);
+    dasics_umain_libcfg_free(idx0);
 
     // Release all remained handlers and exit
     sys_exit();

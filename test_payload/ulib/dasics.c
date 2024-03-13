@@ -151,7 +151,7 @@ uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, ui
 //     return (libcfg >> (idx * 4)) & DASICS_LIBCFG_MASK;
 // }
 
-int32_t ATTR_UMAIN_TEXT dasics_main_libcfg_alloc(uint64_t cfg, uint64_t lo, uint64_t hi) {
+int32_t ATTR_UMAIN_TEXT dasics_umain_libcfg_alloc(uint64_t cfg, uint64_t lo, uint64_t hi) {
     
     uint64_t libcfg = read_csr(0x880);  // DasicsLibCfg
     int32_t max_cfgs = DASICS_LIBCFG_WIDTH;
@@ -242,7 +242,7 @@ int32_t ATTR_UMAIN_TEXT dasics_main_libcfg_alloc(uint64_t cfg, uint64_t lo, uint
     return -1;
 }
 
-int32_t ATTR_UMAIN_TEXT dasics_main_libcfg_free(int32_t idx) {
+int32_t ATTR_UMAIN_TEXT dasics_umain_libcfg_free(int32_t idx) {
     if (idx < 0 || idx >= DASICS_LIBCFG_WIDTH) return -1;
     uint64_t libcfg = read_csr(0x880);  // DasicsLibCfg
     libcfg &= ~(DASICS_LIBCFG_V << (idx * 4));
@@ -252,7 +252,7 @@ int32_t ATTR_UMAIN_TEXT dasics_main_libcfg_free(int32_t idx) {
 
 
 
-int32_t ATTR_UMAIN_TEXT dasics_main_jumpcfg_alloc(uint64_t lo, uint64_t hi)
+int32_t ATTR_UMAIN_TEXT dasics_umain_jumpcfg_alloc(uint64_t lo, uint64_t hi)
 {
     uint64_t jumpcfg = read_csr(0x8c8);    // DasicsJumpCfg
     int32_t max_cfgs = DASICS_JUMPCFG_WIDTH;
@@ -293,7 +293,7 @@ int32_t ATTR_UMAIN_TEXT dasics_main_jumpcfg_alloc(uint64_t lo, uint64_t hi)
     return -1;
 }
 
-int32_t ATTR_UMAIN_TEXT dasics_main_jumpcfg_free(int32_t idx) {
+int32_t ATTR_UMAIN_TEXT dasics_umain_jumpcfg_free(int32_t idx) {
     if (idx < 0 || idx >= DASICS_JUMPCFG_WIDTH) return -1;
     uint64_t jumpcfg = read_csr(0x8c8);    // DasicsJumpCfg
     jumpcfg &= ~(DASICS_JUMPCFG_V << (idx * 16));

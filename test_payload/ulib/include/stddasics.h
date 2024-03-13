@@ -50,9 +50,9 @@ int32_t  ATTR_UMAIN_TEXT dasics_main_libcfg_free(int32_t idx);
 int32_t  ATTR_UMAIN_TEXT dasics_main_jumpcfg_alloc(uint64_t lo, uint64_t hi);
 int32_t  ATTR_UMAIN_TEXT dasics_main_jumpcfg_free(int32_t idx);
 
-void dasics_maincall(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
-#define dasics_maincall_no_args(func_name) (dasics_maincall(0, 0, 0, 0, func_name))
-#define main_printf(fmt) (dasics_maincall(fmt,0,0,0,&printf))
+void dasics_umain_libcall(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
+#define dasics_umain_libcall_no_args(func_name) (dasics_umain_libcall(0, 0, 0, 0, func_name))
+#define main_printf(fmt) (dasics_umain_libcall(fmt,0,0,0,&printf))
 
 //ULIB
 
@@ -61,8 +61,8 @@ int32_t  ATTR_ULIB1_TEXT dasics_ulib_libcfg_free(int32_t idx);
 int32_t  ATTR_ULIB1_TEXT dasics_ulib_jumpcfg_alloc(uint64_t lo, uint64_t hi);
 int32_t  ATTR_ULIB1_TEXT dasics_ulib_jumpcfg_free(int32_t idx);
 
-void dasics_ulibcall(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
-#define dasics_ulibcall_no_args(func_name) (dasics_ulibcall(0, 0, 0, 0, func_name))
+void dasics_ulib_libcall(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
+#define dasics_ulib_libcall_no_args(func_name) (dasics_ulib_libcall(0, 0, 0, 0, func_name))
 
 void dasics_ulib_copy_mem_bound(int bound_src, int bound_dst);
 void dasics_ulib_copy_jmp_bound(int bound_src, int bound_dst);
