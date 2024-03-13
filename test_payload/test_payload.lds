@@ -33,9 +33,12 @@ SECTIONS
     __SFREEZONE_TEXT_BEGIN__ = .;
     *(.sfreezonetext)
     __SFREEZONE_TEXT_END__ = .;
-    __ULIB_TEXT_BEGIN__ = .;
-    *(.ulibtext)
-    __ULIB_TEXT_END__ = .;
+    __ULIB1_TEXT_BEGIN__ = .;
+    *(.ulib1text)
+    __ULIB2_TEXT_BEGIN__ = .;
+    *(.ulib2text)
+    __ULIB2_TEXT_END__ = .;
+    __ULIB1_TEXT_END__ = .;
     __UFREEZONE_TEXT_BEGIN__ = .;
     *(.ufreezonetext)
     __UFREEZONE_TEXT_END__ = .;
@@ -172,7 +175,7 @@ SECTIONS
     __SFREEZONE_DATA_BEGIN__ = .;
     *(.sfreezonedata)
     __SFREEZONE_DATA_END__ = .;
-    *(.ulibdata)
+    *(.ulib1data)
     *(.ufreezonedata)
   }
   _end = .; PROVIDE (end = .);
