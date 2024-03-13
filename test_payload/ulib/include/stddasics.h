@@ -36,34 +36,43 @@ enum ExcCode
     EXCC_DASICS_UECALL_FAULT = 30,
 };
 
+#define TYPE_MEM_BOUND 0
+#define TYPE_JMP_BOUND 1
+
+//MAIN
+
 void     ATTR_UMAIN_TEXT dasics_init_umaincall(uint64_t entry);
 uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, uint64_t arg1, uint64_t arg2);
 void     ATTR_UMAIN_TEXT dasics_ufault_entry(void);
-int32_t  ATTR_UMAIN_TEXT dasics_libcfg_alloc(uint32_t field, uint64_t cfg, uint64_t lo ,uint64_t hi);
-int32_t  ATTR_UMAIN_TEXT dasics_libcfg_free(int32_t idx);
-uint32_t ATTR_UMAIN_TEXT dasics_libcfg_get(int32_t idx);
-int32_t  ATTR_UMAIN_TEXT dasics_jumpcfg_alloc(uint32_t field, uint64_t lo, uint64_t hi);
-int32_t  ATTR_UMAIN_TEXT dasics_jumpcfg_free(int32_t idx);
+// uint32_t ATTR_UMAIN_TEXT dasics_libcfg_get(int32_t idx);
+int32_t  ATTR_UMAIN_TEXT dasics_main_libcfg_alloc(uint64_t cfg, uint64_t lo ,uint64_t hi);
+int32_t  ATTR_UMAIN_TEXT dasics_main_libcfg_free(int32_t idx);
+int32_t  ATTR_UMAIN_TEXT dasics_main_jumpcfg_alloc(uint64_t lo, uint64_t hi);
+int32_t  ATTR_UMAIN_TEXT dasics_main_jumpcfg_free(int32_t idx);
 
-void dasics_call_lib(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
-#define dasics_call_lib_no_args(func_name) (dasics_call_lib(0, 0, 0, 0, func_name))
-#define main_printf(fmt) (dasics_call_lib(fmt,0,0,0,&printf))
+void dasics_maincall(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
+#define dasics_maincall_no_args(func_name) (dasics_maincall(0, 0, 0, 0, func_name))
+#define main_printf(fmt) (dasics_maincall(fmt,0,0,0,&printf))
 
-#define TYPE_MEM_BOUND 0
-#define TYPE_JMP_BOUND 1
-#define FIELD_MAIN 0
-#define FIELD_LIB 1
-void dasics_copy_mem_bound(int bound_src, int bound_dst);
-void dasics_copy_jmp_bound(int bound_src, int bound_dst);
-uint64_t dasics_query_mem_bound(void);
-uint64_t dasics_query_jmp_bound(void);
+//ULIB
 
-#define dasics_copy_bound(type,bound_src,bound_dst) ((type)?\
-                                                    dasics_copy_jmp_bound(bound_src, bound_dst):\
-                                                    dasics_copy_mem_bound(bound_src, bound_dst))
-#define dasics_query_bound(type) ((type)?\
-                                  dasics_query_jmp_bound():\
-                                  dasics_query_mem_bound())
+int32_t  ATTR_ULIB1_TEXT dasics_ulib_libcfg_alloc(uint64_t cfg, uint64_t lo ,uint64_t hi);
+int32_t  ATTR_ULIB1_TEXT dasics_ulib_libcfg_free(int32_t idx);
+int32_t  ATTR_ULIB1_TEXT dasics_ulib_jumpcfg_alloc(uint64_t lo, uint64_t hi);
+int32_t  ATTR_ULIB1_TEXT dasics_ulib_jumpcfg_free(int32_t idx);
 
+void dasics_ulibcall(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
+#define dasics_ulibcall_no_args(func_name) (dasics_ulibcall(0, 0, 0, 0, func_name))
 
+void dasics_ulib_copy_mem_bound(int bound_src, int bound_dst);
+void dasics_ulib_copy_jmp_bound(int bound_src, int bound_dst);
+uint64_t dasics_ulib_query_mem_bound(void);
+uint64_t dasics_ulib_query_jmp_bound(void);
+
+#define dasics_ulib_copy_bound(type,bound_src,bound_dst) ((type)?\
+                                                    dasics_ulib_copy_jmp_bound(bound_src, bound_dst):\
+                                                    dasics_ulib_copy_mem_bound(bound_src, bound_dst))
+#define dasics_ulib_query_bound(type) ((type)?\
+                                  dasics_ulib_query_jmp_bound():\
+                                  dasics_ulib_query_mem_bound())
 #endif
