@@ -53,6 +53,7 @@ int32_t  ATTR_UMAIN_TEXT dasics_main_jumpcfg_free(int32_t idx);
 void dasics_umain_libcall(void *arg0, void *arg1, void *arg2, void *arg3, void *func_name);
 #define dasics_umain_libcall_no_args(func_name) (dasics_umain_libcall(0, 0, 0, 0, func_name))
 #define main_printf(fmt) (dasics_umain_libcall(fmt,0,0,0,&printf))
+#define main_printf_1(fmt, arg0) (dasics_umain_libcall(fmt, arg0, 0, 0, &printf))
 
 //ULIB
 

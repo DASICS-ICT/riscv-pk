@@ -36,12 +36,18 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
         case EXCC_DASICS_UINSTR_FAULT:
             //const char* message_1 = "[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n";          
             main_printf("[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n");
+            main_printf_1("uepc: 0x%lx\t", uepc);
+            main_printf_1("utval: 0x%lx\n", utval);
             break;
         case EXCC_DASICS_ULOAD_FAULT:
             main_printf("[HANDLE_U_DASICS]: Detect ULoad Access Fault! Skip this instruction!\n");
+            main_printf_1("uepc: 0x%lx\t", uepc);
+            main_printf_1("utval: 0x%lx\n", utval);
             break;
         case EXCC_DASICS_USTORE_FAULT:
             main_printf("[HANDLE_U_DASICS]: Detect UStore Access Fault! Skip this instruction!\n");
+            main_printf_1("uepc: 0x%lx\t", uepc);
+            main_printf_1("utval: 0x%lx\n", utval);
             break;
         default:
             main_printf("[HANDLE_U_DASICS]: Invalid cause! exit..");
@@ -61,16 +67,16 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
     write_csr(0x8b7, dasics_return_pc3);
     write_csr(0x8b2, dasics_free_zone_return_pc);
 
-    asm volatile ("ld   ra, 104(sp)\n"\
-                  "ld   s0, 96(sp)\n"\
-                  "addi sp, sp, 112\n"\
+    asm volatile ("ld   ra, 152(sp)\n"\
+                  "ld   s0, 144(sp)\n"\
+                  "addi sp, sp, 160\n"\
                   "uret");
 }
 
 
 uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, uint64_t arg1, uint64_t arg2)
 {
-    uint64_t dasics_return_pc = read_csr(0x8b1);            // DasicsReturnPC
+    uint64_t dasics_return_pc = read_csr(0x8b4);            // DasicsReturnPC0
     uint64_t dasics_free_zone_return_pc = read_csr(0x8b2);  // DasicsFreeZoneReturnPC
 
     uint64_t retval = 0;
@@ -119,14 +125,14 @@ uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, ui
             //     :[fmt]"r"((void*)arg0), [func_name]"i"(&printf)
             //     :"t0", "a0", "ra"
             // );
-            main_printf((void*)arg0);
+            main_printf_1((void*)arg0, (uint64_t)arg1);
             break; 
         default:
             printf("Warning: Invalid umaincall number %u!\n", type);
             break;
     }
 
-    write_csr(0x8b1, dasics_return_pc);             // DasicsReturnPC
+    write_csr(0x8b4, dasics_return_pc);             // DasicsReturnPC0
     write_csr(0x8b2, dasics_free_zone_return_pc);   // DasicsFreeZoneReturnPC
 
     //if(type == UMAINCALL_WRITE_AZONE_RETPC) write_csr(0x8b2, arg0); 
@@ -303,6 +309,10 @@ int32_t ATTR_UMAIN_TEXT dasics_umain_jumpcfg_free(int32_t idx) {
 
 // ULIB1 FUNCTION
 
+static void ATTR_ULIB1_TEXT dasics_ulib1_printf_1(uint64_t fmt, uint64_t arg0){
+    dasics_umaincall(UMAINCALL_PRINTF,fmt,arg0,0);
+}
+
 int32_t ATTR_ULIB1_TEXT dasics_ulib_libcfg_alloc(uint64_t cfg, uint64_t lo, uint64_t hi) {
     
     uint64_t libcfg = read_csr(0x880);  // DasicsLibCfg
@@ -318,7 +328,7 @@ int32_t ATTR_ULIB1_TEXT dasics_ulib_libcfg_alloc(uint64_t cfg, uint64_t lo, uint
             for (orig_idx = 0; orig_idx < max_cfgs; ++orig_idx){
                 uint64_t orig_status = (mem_bound_status >> (orig_idx * 2)) & 0x3;
                 if (orig_status == 0x1){ // libcfg in the same level
-                    uint64_t orig_cfg = libcfg >> (target_idx * 4) & DASICS_LIBCFG_MASK;
+                    uint64_t orig_cfg = (libcfg >> (orig_idx * 4)) & DASICS_LIBCFG_MASK;
                     uint64_t orig_lo,orig_hi;
                     switch (orig_idx) { // read origin libcfg
                     case 0:
@@ -472,6 +482,25 @@ int32_t ATTR_ULIB1_TEXT dasics_ulib_libcfg_alloc(uint64_t cfg, uint64_t lo, uint
     return -1;
 }
 
+
+int32_t ATTR_ULIB1_TEXT dasics_ulib_libcfg_copy(int src_idx) {
+    uint64_t libcfg = read_csr(0x880);  // DasicsLibCfg
+    int32_t max_cfgs = DASICS_LIBCFG_WIDTH;
+    uint64_t mem_bound_status = dasics_ulib_query_bound(TYPE_MEM_BOUND);
+    uint64_t src_status = (mem_bound_status >> (src_idx * 2)) & 0x3;
+    if (src_status == 0 || src_status == 3) return -1;  // cannot copy
+    int32_t target_idx;
+    for (target_idx= 0; target_idx < max_cfgs; ++target_idx) {
+        uint64_t curr_status = (mem_bound_status >> (target_idx * 2)) & 0x3;
+
+        if (curr_status == 0x3){
+            dasics_ulib_copy_bound(TYPE_MEM_BOUND,src_idx,target_idx); // copy origin libcfg to target
+            return target_idx;
+        }
+    }
+    return -1;
+}
+
 int32_t ATTR_ULIB1_TEXT dasics_ulib_libcfg_free(int32_t idx) {
     uint64_t mem_bound_status = dasics_ulib_query_bound(TYPE_MEM_BOUND);
     if (!(mem_bound_status >> (idx * 2) & 0x3)) return -1; // no permission
@@ -496,14 +525,13 @@ int32_t ATTR_ULIB1_TEXT dasics_ulib_jumpcfg_alloc(uint64_t lo, uint64_t hi)
     uint64_t jmp_bound_status = dasics_ulib_query_bound(TYPE_JMP_BOUND);
     int32_t target_idx,orig_idx;
     for (target_idx = 0; target_idx < max_cfgs; ++target_idx) {
-        uint64_t curr_cfg = (jmp_bound_status >> (target_idx * 2)) & 0x3;
-        if (jmp_bound_status == 0x3) // found available cfg
+        uint64_t curr_status = (jmp_bound_status >> (target_idx * 2)) & 0x3;
+        if (curr_status == 0x3) // found available cfg
         {
             // try to find origin jmpcfg 
             for (orig_idx = 0; orig_idx < max_cfgs; ++orig_idx){
                 uint64_t orig_status = (jmp_bound_status >> (orig_idx * 2)) & 0x3;
                 if (orig_status == 0x1){ // jmpcfg in the same level
-                    uint64_t orig_cfg = jumpcfg >> (target_idx * 16) & DASICS_JUMPCFG_MASK;
                     uint64_t orig_lo,orig_hi;
                     switch (orig_idx) { // read origin jmpcfg
                         case 0:

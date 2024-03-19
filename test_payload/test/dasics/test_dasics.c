@@ -12,7 +12,7 @@ static char ATTR_ULIB1_DATA main_prompt2[128] = "[UMAIN]: DasicsLibCfg0: 0x%lx\n
 static char ATTR_ULIB1_DATA main_prompt3[128] = "[UMAIN]: DasicsReturnPC: 0x%lx\n";
 static char ATTR_ULIB1_DATA main_prompt4[128] = "[UMAIN]: DasicsFreeZoneReturnPC: 0x%lx\n";
 
-static char ATTR_ULIB1_DATA ulib2_rwbuffer[128] = "[ENTER ULIB2]: This is rw to ULIB1 and ULIB2!";
+static char ATTR_ULIB1_DATA ulib2_rwbuffer[128] = "[ENTER ULIB2]: This is rw to ULIB1 and ULIB2!\n";
 
 void ATTR_UMAIN_TEXT dasics_main(void);
 static void ATTR_ULIB1_TEXT dasics_ulib1(void);
@@ -43,6 +43,15 @@ static void ATTR_ULIB1_TEXT dasics_ulib1_printf(uint64_t fmt){
     dasics_umaincall(UMAINCALL_PRINTF,fmt,0,0);
 }
 
+static void ATTR_ULIB1_TEXT dasics_ulib1_printf_1(uint64_t fmt, uint64_t arg0){
+    dasics_umaincall(UMAINCALL_PRINTF,fmt,arg0,0);
+}
+
+static inline uint64_t ATTR_ULIB1_TEXT roundup8_ulib1(uint64_t x) {
+    int roundup = (x & 7) ? 8 : 0;
+    return (x & ~7UL) + roundup;
+}
+
 static void ATTR_ULIB2_TEXT dasics_ulib2_printf(uint64_t fmt){
     dasics_umaincall(UMAINCALL_PRINTF,fmt,0,0);
 }
@@ -59,7 +68,7 @@ static void ATTR_ULIB2_TEXT dasics_ulib2(void){
 
     dasics_ulib1();                // raise DasicsUInstrAccessFault (0x10)
 
-    ulib2_rwbuffer[2] = ulib1_readonly[3];  // 'T'; That's ok
+    ulib2_rwbuffer[2] = ulib1_rwbuffer[3];  // 'T'; That's ok
     ulib2_rwbuffer[3] = 'H'; //That's ok
     dasics_ulib2_printf((uint64_t) ulib2_rwbuffer); // That's ok
 
@@ -78,12 +87,14 @@ static void ATTR_ULIB1_TEXT dasics_ulib1(void) {
     dasics_main();                // raise DasicsUInstrAccessFault (0x10)
     
     //SET ULIB2 ENVIRONMENT
-    int idx0, idx1, idx2;
+    int idx0, idx1, idx2, idx3, idx4;
     idx0 = dasics_ulib_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R                  , (uint64_t)ulib1_rwbuffer, (uint64_t)(ulib1_rwbuffer + 128));
     idx1 = dasics_ulib_libcfg_alloc(DASICS_LIBCFG_V | DASICS_LIBCFG_R | DASICS_LIBCFG_W, (uint64_t)ulib2_rwbuffer, (uint64_t)(ulib2_rwbuffer + 128));
     idx2 = dasics_ulib_libcfg_alloc(DASICS_LIBCFG_V                                    , (uint64_t)ulib1_readonly, (uint64_t)(ulib1_readonly + 128));
+    idx3 = dasics_ulib_libcfg_copy(0);
+    idx4 = dasics_ulib_libcfg_copy(1);
     extern char __ULIB2_TEXT_BEGIN__, __ULIB2_TEXT_END__;
-    int32_t idx_ulib2 = dasics_ulib_jumpcfg_alloc((uint64_t)&__ULIB2_TEXT_BEGIN__, (uint64_t)&__ULIB2_TEXT_END__);
+    int32_t idx_ulib2 = dasics_ulib_jumpcfg_alloc((uint64_t)&__ULIB2_TEXT_BEGIN__, roundup8_ulib1((uint64_t)&__ULIB2_TEXT_END__));
 
     //CALL ULIB2
     dasics_ulib_libcall_no_args(&dasics_ulib2);
@@ -96,16 +107,23 @@ static void ATTR_ULIB1_TEXT dasics_ulib1(void) {
     ulib1_rwbuffer[22] = 'B';               // That's ok
     //lib_printf(pub_rwbuffer,&printf, &dasics_umaincall);                 
     dasics_ulib1_printf(ulib1_rwbuffer);    // That's ok
-    ulib2_rwbuffer[24] = ulib1_readonly[25];// 'o'; That's ok
-    ulib1_rwbuffer[25] = 'k';                // That's ok
-    dasics_ulib2_printf(ulib2_rwbuffer);    // That's ok
+    ulib2_rwbuffer[24] = ulib1_readonly[26];// 't'; That's ok
+    ulib2_rwbuffer[25] = 'k';                // That's ok
+    dasics_ulib1_printf(ulib2_rwbuffer);    // That's ok
 
     //FREE
+    dasics_ulib_libcfg_free(idx4);
+    dasics_ulib_libcfg_free(idx3);
     dasics_ulib_libcfg_free(idx2);
     dasics_ulib_libcfg_free(idx1);
     dasics_ulib_libcfg_free(idx0);
     dasics_ulib_jumpcfg_free(idx_ulib2);
 
+}
+
+static inline uint64_t ATTR_UMAIN_TEXT roundup8(uint64_t x) {
+    int roundup = (x & 7) ? 8 : 0;
+    return (x & ~7UL) + roundup;
 }
 
 void ATTR_UMAIN_TEXT dasics_main(void) {
@@ -131,7 +149,7 @@ void ATTR_UMAIN_TEXT dasics_main(void) {
 
 
     extern char __ULIB1_TEXT_BEGIN__, __ULIB1_TEXT_END__;
-    idx3 = dasics_umain_jumpcfg_alloc((uint64_t)&__ULIB1_TEXT_BEGIN__, (uint64_t)&__ULIB1_TEXT_END__);
+    idx3 = dasics_umain_jumpcfg_alloc((uint64_t)&__ULIB1_TEXT_BEGIN__, roundup8((uint64_t)&__ULIB1_TEXT_END__));
 
     // Jump to lib function
     //dasics_ulib1();
