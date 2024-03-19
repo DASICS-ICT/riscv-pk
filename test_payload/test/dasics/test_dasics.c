@@ -94,7 +94,7 @@ static void ATTR_ULIB1_TEXT dasics_ulib1(void) {
     idx3 = dasics_ulib_libcfg_copy(0);
     idx4 = dasics_ulib_libcfg_copy(1);
     extern char __ULIB2_TEXT_BEGIN__, __ULIB2_TEXT_END__;
-    int32_t idx_ulib2 = dasics_ulib_jumpcfg_alloc((uint64_t)&__ULIB2_TEXT_BEGIN__, roundup8_ulib1((uint64_t)&__ULIB2_TEXT_END__));
+    int32_t idx_ulib2 = dasics_ulib_jumpcfg_alloc((uint64_t)(&__ULIB2_TEXT_BEGIN__) & ~7UL, roundup8_ulib1((uint64_t)&__ULIB2_TEXT_END__));
 
     //CALL ULIB2
     dasics_ulib_libcall_no_args(&dasics_ulib2);
@@ -149,7 +149,7 @@ void ATTR_UMAIN_TEXT dasics_main(void) {
 
 
     extern char __ULIB1_TEXT_BEGIN__, __ULIB1_TEXT_END__;
-    idx3 = dasics_umain_jumpcfg_alloc((uint64_t)&__ULIB1_TEXT_BEGIN__, roundup8((uint64_t)&__ULIB1_TEXT_END__));
+    idx3 = dasics_umain_jumpcfg_alloc((uint64_t)(&__ULIB1_TEXT_BEGIN__) & ~7UL, roundup8((uint64_t)&__ULIB1_TEXT_END__));
 
     // Jump to lib function
     //dasics_ulib1();

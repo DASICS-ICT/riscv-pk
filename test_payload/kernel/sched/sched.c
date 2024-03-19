@@ -99,6 +99,11 @@ void do_unblock(list_node_t *pcb_node)
     }
 }
 
+static inline uint64_t roundup8(uint64_t x) {
+    int roundup = (x & 7) ? 8 : 0;
+    return (x & ~7UL) + roundup;
+}
+
 static void init_pcb_stack(
     ptr_t kernel_stack, ptr_t user_stack, ptr_t entry_point,
     pcb_t *pcb, void* arg)
@@ -125,7 +130,7 @@ static void init_pcb_stack(
     extern char _ftext, _etext;
     pt_regs->dasicsUMainCfg = 0x2UL;
     pt_regs->dasicsUMainBoundLo = (ptr_t) &_ftext;
-    pt_regs->dasicsUMainBoundHi = (ptr_t) &_etext;
+    pt_regs->dasicsUMainBoundHi = roundup8((ptr_t) &_etext);
 
     extern char __RODATA_BEGIN__, __RODATA_END__;
     pt_regs->dasicsLibBounds[0][0] = kernel_stack - PAGE_SIZE;
