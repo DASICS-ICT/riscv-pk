@@ -23,7 +23,7 @@ BBL_PAYLOAD = $(LINUX_ELF)
 #BBL_PAYLOAD = dummy_payload
 BBL_CONFIG = --host=riscv64-unknown-elf \
 	     --with-payload=$(BBL_PAYLOAD) \
-	     --with-arch=rv64imac \
+	     --with-arch=rv64imac_zicsr_zifencei \
 	     --with-mem-start=0x1000000000 \
 	     --enable-logo \
 	     #--enable-print-device-tree
