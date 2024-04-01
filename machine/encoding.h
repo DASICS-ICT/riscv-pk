@@ -974,6 +974,10 @@
 #define CAUSE_FETCH_PAGE_FAULT 0xc
 #define CAUSE_LOAD_PAGE_FAULT 0xd
 #define CAUSE_STORE_PAGE_FAULT 0xf
+// FDI
+#define FDIUJumpFault              0x18
+#define FDIULoadAccessFault        0x19
+#define FDIUStoreAccessFault       0x1a
 #endif
 #ifdef DECLARE_INSN
 DECLARE_INSN(beq, MATCH_BEQ, MASK_BEQ)
