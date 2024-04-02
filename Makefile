@@ -21,8 +21,10 @@ BBL_BIN = $(BBL_BUILD_PATH)/bbl.bin
 
 BBL_PAYLOAD = $(LINUX_ELF)
 #BBL_PAYLOAD = dummy_payload
-BBL_CONFIG = --host=riscv64-unknown-elf --with-payload=$(BBL_PAYLOAD) \
-						 --with-arch=rv64imac --enable-logo #--enable-print-device-tree
+BBL_CONFIG = --host=riscv64-unknown-elf \
+	     --with-payload=$(BBL_PAYLOAD) \
+	     --with-arch=rv64imac_zicsr_zifencei \
+	     --enable-logo
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
 DTS = dts/system.dts
@@ -87,7 +89,8 @@ linux: $(LINUX_ELF)
 
 $(LINUX_ELF): | $(LINUX_REPO_PATH) $(ROOTFS_PATH)
 	$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH)
-	$(RFS_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv CONFIG_SECTION_MISMATCH_WARN_ONLY=y vmlinux
+	$(RFS_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv vmlinux
+	mkdir -p $(BBL_BUILD_PATH)
 	$(RISCV_DUMP) -d $(LINUX_ELF) > $(BBL_BUILD_PATH)/vmlinux.txt
 
 linux-clean:
