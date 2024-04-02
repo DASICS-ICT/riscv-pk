@@ -29,6 +29,17 @@ trap_table:
   .dc.a __trap_from_machine_mode
   .dc.a bad_trap
   .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap
+  .dc.a bad_trap  /* FDI_UJUMP_FAULT */
+  .dc.a bad_trap  /* FDI_ULOAD_FAULT */
+  .dc.a bad_trap  /* FDI_USTORE_FAULT */
 
   .option norvc
   .section .text.init,"ax",@progbits
