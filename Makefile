@@ -110,7 +110,7 @@ noop: bbl
 	$(MAKE) -C $(NOOP_HOME) emu IMAGE="$(abspath $(BBL_BIN))"
 
 qemu: bbl
-	qemu-system-riscv64 -nographic -kernel $(BBL_ELF_BUILD) -machine virt
+#	qemu-system-riscv64 -nographic -kernel $(BBL_ELF_BUILD) -machine virt
 
 clean: bbl-clean #linux-clean
 #	-$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH) clean
