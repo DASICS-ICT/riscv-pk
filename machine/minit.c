@@ -49,7 +49,7 @@ static void delegate_traps()
   if (!supports_extension('S'))
     return;
 
-  uintptr_t interrupts = MIP_SSIP | MIP_STIP | MIP_SEIP;
+  uintptr_t interrupts = MIP_SSIP | MIP_STIP | MIP_SEIP | MIP_UEIP;
   uintptr_t exceptions =
     (1UL << CAUSE_MISALIGNED_FETCH) |
     (1UL << CAUSE_FETCH_PAGE_FAULT) |
@@ -76,13 +76,15 @@ static void delegate_traps()
 
   if(!supports_extension('N'))
 	  return;
-
+  uintptr_t uinterrupts = SIP_UEIP;
   uintptr_t uexceptions = 
     (1U << CAUSE_DASICS_UINSTR_FAULT) |
     (1U << CAUSE_DASICS_ULOAD_FAULT)  |
     (1U << CAUSE_DASICS_USTORE_FAULT) |
     (1U << CAUSE_DASICS_UECALL_FAULT);
+  write_csr(sideleg, uinterrupts);
   write_csr(sedeleg, uexceptions);
+  assert(read_csr(sideleg) == uinterrupts);
   assert(read_csr(sedeleg) == uexceptions);
 }
 
