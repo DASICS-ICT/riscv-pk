@@ -1,6 +1,5 @@
 /dts-v1/;
-/include/ "zynq-standalone.dtsi"
-
+/include/ "noop.dtsi"
 / {
 	#address-cells = <2>;
 	#size-cells = <2>;

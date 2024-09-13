@@ -19,18 +19,29 @@ BBL_BUILD_MAKEFILE = $(BBL_BUILD_PATH)/Makefile
 BBL_ELF_BUILD = $(BBL_BUILD_PATH)/bbl
 BBL_BIN = $(BBL_BUILD_PATH)/bbl.bin
 
+BOARD ?= sim # sim / zynq
+
+ifeq ($(BOARD),sim) # sim
+LINUX_CONFIG = emu_defconfig
+BBL_MEM_ADDR = 0x80000000
+DTS = dts/system-sim.dts
+else # pynq
+LINUX_CONFIG = zynq_dasics_defconfig
+BBL_MEM_ADDR = 0x50000000
+DTS = dts/system-zynq.dts
+endif
+
 BBL_PAYLOAD = $(LINUX_ELF)
 #BBL_PAYLOAD = dummy_payload
 BBL_CONFIG = --host=riscv64-unknown-elf \
 	     --with-payload=$(BBL_PAYLOAD) \
 	     --with-arch=rv64imac \
-	     --with-mem-start=0x50000000 \
+	     --with-mem-start=$(BBL_MEM_ADDR) \
 	     --enable-logo \
 		 --enable-fp-emulation \
 	     #--enable-print-device-tree
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
-DTS = dts/system.dts
 
 ifeq ($(MAKECMDGOALS),qemu)
 BBL_ENV = CFLAGS=-D__QEMU__
@@ -59,11 +70,9 @@ $(BBL_BIN): $(BBL_ELF_BUILD)
 	$(RISCV_DUMP) -d $< > $<.txt
 
 $(BBL_BUILD_MAKEFILE):
-	mkdir -p $(@D)
 	cd $(@D) && $(BBL_REPO_PATH)/configure $(BBL_CONFIG)
 
 $(DTB): $(DTS)
-	mkdir -p $(@D)
 	dtc -O dtb -I dts -o $@ $<
 
 dummy_payload:
@@ -93,7 +102,9 @@ $(ROOTFS_PATH):
 linux: $(LINUX_ELF)
 
 $(LINUX_ELF): | $(LINUX_REPO_PATH) $(ROOTFS_PATH)
+	mkdir -p $(BBL_BUILD_PATH)
 	$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH)
+	$(RFS_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv $(LINUX_CONFIG)
 	$(RFS_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv vmlinux -j16
 	mkdir -p $(BBL_BUILD_PATH)
 	$(RISCV_DUMP) -d $(LINUX_ELF) > $(BBL_BUILD_PATH)/vmlinux.txt
@@ -103,7 +114,6 @@ linux-clean:
 	-$(RFS_ENV) $(MAKE) clean -C $(LINUX_REPO_PATH)
 
 .PHONY: linux linux-clean $(LINUX_ELF)
-
 
 #--------------------------------------------------------------------
 # Top-level rules
@@ -121,6 +131,8 @@ qemu: bbl
 #	qemu-system-riscv64 -nographic -kernel $(BBL_ELF_BUILD) -machine virt
 
 clean: bbl-clean #linux-clean
-#	-$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH) clean
 
-.PHONY: default run clean
+clean-all: bbl-clean linux-clean
+	-$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH) clean
+
+.PHONY: default run clean clean-all
