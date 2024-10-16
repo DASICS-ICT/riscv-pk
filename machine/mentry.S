@@ -37,18 +37,8 @@ trap_table:
   .dc.a bad_trap
   .dc.a bad_trap
   .dc.a bad_trap
-  .dc.a bad_trap  # 24, dasicsUInstrFault
-  .dc.a dasics_trap  # 25, dasicsSInstrFault
-  .dc.a bad_trap  # 26, dasicsULoadFault
-  .dc.a dasics_trap  # 27, dasicsSLoadFault
-  .dc.a bad_trap  # 28, dasicsUStoreFault
-  .dc.a dasics_trap  # 29, dasicsSStoreFault
-  .dc.a bad_trap  # 30, dasicsUEcallFault
-  .dc.a bad_trap  # 31, dasicsSEcallFault
-  .dc.a bad_trap  /* PKU Load Page Fault */
-  .dc.a bad_trap  /* PKU Store Page Fault */
-  .dc.a bad_trap  /* PKS Load Page Fault */
-  .dc.a bad_trap  /* PKS Store Page Fault */
+  .dc.a bad_trap  # 24, dasicsUcheckFault
+  .dc.a dasics_trap  # 25, dasicsScheckFault
 
   .option norvc
   .section .text.init,"ax",@progbits

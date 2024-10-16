@@ -95,18 +95,23 @@
 #define MCONTROL_MATCH_MASK_LOW  4
 #define MCONTROL_MATCH_MASK_HIGH 5
 
+#define MIP_USIP            (1 << IRQ_U_SOFT)
 #define MIP_SSIP            (1 << IRQ_S_SOFT)
 #define MIP_HSIP            (1 << IRQ_H_SOFT)
 #define MIP_MSIP            (1 << IRQ_M_SOFT)
+#define MIP_UTIP            (1 << IRQ_U_TIMER)
 #define MIP_STIP            (1 << IRQ_S_TIMER)
 #define MIP_HTIP            (1 << IRQ_H_TIMER)
 #define MIP_MTIP            (1 << IRQ_M_TIMER)
+#define MIP_UEIP            (1 << IRQ_U_EXT)
 #define MIP_SEIP            (1 << IRQ_S_EXT)
 #define MIP_HEIP            (1 << IRQ_H_EXT)
 #define MIP_MEIP            (1 << IRQ_M_EXT)
 
 #define SIP_SSIP MIP_SSIP
 #define SIP_STIP MIP_STIP
+
+#define SIP_UEIP MIP_UEIP
 
 #define PRV_U 0
 #define PRV_S 1
@@ -138,12 +143,16 @@
 #define PMP_NA4   0x10
 #define PMP_NAPOT 0x18
 
+
+#define IRQ_U_SOFT   0
 #define IRQ_S_SOFT   1
 #define IRQ_H_SOFT   2
 #define IRQ_M_SOFT   3
+#define IRQ_U_TIMER  4
 #define IRQ_S_TIMER  5
 #define IRQ_H_TIMER  6
 #define IRQ_M_TIMER  7
+#define IRQ_U_EXT    8
 #define IRQ_S_EXT    9
 #define IRQ_H_EXT    10
 #define IRQ_M_EXT    11
@@ -974,18 +983,8 @@
 #define CAUSE_FETCH_PAGE_FAULT 0xc
 #define CAUSE_LOAD_PAGE_FAULT 0xd
 #define CAUSE_STORE_PAGE_FAULT 0xf
-#define CAUSE_DASICS_UINSTR_FAULT 0x18
-#define CAUSE_DASICS_SINSTR_FAULT 0x19
-#define CAUSE_DASICS_ULOAD_FAULT 0x1a
-#define CAUSE_DASICS_SLOAD_FAULT 0x1b
-#define CAUSE_DASICS_USTORE_FAULT 0x1c
-#define CAUSE_DASICS_SSTORE_FAULT 0x1d
-#define CAUSE_DASICS_UECALL_FAULT 0x1e
-#define CAUSE_DASICS_SECALL_FAULT 0x1f
-#define CAUSE_PKU_LOAD_PAGE_FAULT 0x20
-#define CAUSE_PKU_STORE_PAGE_FAULT 0x21
-#define CAUSE_PKS_LOAD_PAGE_FAULT 0x22
-#define CAUSE_PKS_STORE_PAGE_FAULT 0x23
+#define CAUSE_DASICS_UCHECK_FAULT   0x18
+#define CAUSE_DASICS_SCHECK_FAULT   0x19
 #endif
 #ifdef DECLARE_INSN
 DECLARE_INSN(beq, MATCH_BEQ, MASK_BEQ)
@@ -1480,16 +1479,6 @@ DECLARE_CAUSE("machine_ecall", CAUSE_MACHINE_ECALL)
 DECLARE_CAUSE("fetch page fault", CAUSE_FETCH_PAGE_FAULT)
 DECLARE_CAUSE("load page fault", CAUSE_LOAD_PAGE_FAULT)
 DECLARE_CAUSE("store page fault", CAUSE_STORE_PAGE_FAULT)
-DECLARE_CAUSE("dasics user instruction fault", CAUSE_DASICS_UINSTR_FAULT)
-DECLARE_CAUSE("dasics supervisor instruction fault", CAUSE_DASICS_SINSTR_FAULT)
-DECLARE_CAUSE("dasics user load fault", CAUSE_DASICS_ULOAD_FAULT)
-DECLARE_CAUSE("dasics supervisor load fault", CAUSE_DASICS_SLOAD_FAULT)
-DECLARE_CAUSE("dasics user store fault", CAUSE_DASICS_USTORE_FAULT)
-DECLARE_CAUSE("dasics supervisor store fault", CAUSE_DASICS_SSTORE_FAULT)
-DECLARE_CAUSE("dasics user ecall fault", CAUSE_DASICS_UECALL_FAULT)
-DECLARE_CAUSE("dasics supervisor ecall fault", CAUSE_DASICS_SECALL_FAULT)
-DECLARE_CAUSE("mpk user load page fault", CAUSE_PKU_LOAD_PAGE_FAULT)
-DECLARE_CAUSE("mpk user store page fault", CAUSE_PKU_STORE_PAGE_FAULT)
-DECLARE_CAUSE("mpk supervisor load page fault", CAUSE_PKS_LOAD_PAGE_FAULT)
-DECLARE_CAUSE("mpk supervisor store page fault", CAUSE_PKS_STORE_PAGE_FAULT)
+DECLARE_CAUSE("dasics user check fault", CAUSE_DASICS_UCHECK_FAULT)
+DECLARE_CAUSE("dasics supervisor check fault", CAUSE_DASICS_SCHECK_FAULT)
 #endif
