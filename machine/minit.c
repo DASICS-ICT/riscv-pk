@@ -89,18 +89,18 @@ static void dump_misa(uint32_t misa) {
 
 static void dasics_init()
 {
-  #define DASICS_SCFG_ENA 0
+  // #define DASICS_SCFG_ENA 0
 
-  write_csr(0xbc0, (1U << DASICS_SCFG_ENA));  // DasicsSMainCfg
+  // write_csr(0xbc0, (1U << DASICS_SCFG_ENA));  // DasicsSMainCfg
 
   /**
    * TODO: Currently we allocate the whole memory space for smain-text, which
    * should be narrowed down by smain calling sbi functions. It looks not perfect yet ...
    */
-  #define DASICS_SMAIN_HI 0xfffffffffffffffflu
-  #define DASICS_SMAIN_LO 0x0lu
-  write_csr(0xbc3, DASICS_SMAIN_HI);
-  write_csr(0xbc2, DASICS_SMAIN_LO);
+  // #define DASICS_SMAIN_HI 0xfffffffffffffffflu
+  // #define DASICS_SMAIN_LO 0x0lu
+  // write_csr(0xbc3, DASICS_SMAIN_HI);
+  // write_csr(0xbc2, DASICS_SMAIN_LO);
 }
 
 static void fp_init()
