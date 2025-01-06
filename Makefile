@@ -9,6 +9,8 @@ RISCV_COPY = $(RISCV_PREFIX)objcopy
 RISCV_DUMP = $(RISCV_PREFIX)objdump
 RISCV_COPY_FLAGS = --set-section-flags .bss=alloc,contents --set-section-flags .sbss=alloc,contents -O binary
 
+BOARD ?= sim # sim / nexst / s2c19p
+
 #--------------------------------------------------------------------
 # BBL variables
 #--------------------------------------------------------------------
@@ -29,7 +31,16 @@ BBL_CONFIG = --host=riscv64-unknown-elf \
 	     #--enable-print-device-tree
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
-DTS = dts/system.dts
+
+ifeq ($(BOARD),s2c19p)
+DTS = dts/system-s2c19p.dts
+else 
+	ifeq ($(BOARD),nexst)
+	DTS = dts/system-nexst.dts
+	else 
+	DTS = dts/system-origin.dts
+	endif
+endif
 
 ifeq ($(MAKECMDGOALS),qemu)
 BBL_ENV = CFLAGS=-D__QEMU__
@@ -105,6 +116,8 @@ linux-clean:
 #--------------------------------------------------------------------
 
 default: bbl
+
+fpga: bbl
 
 nemu: bbl
 	$(MAKE) -C $(NEMU_HOME) ISA=riscv64 run ARGS="-b $(abspath $(BBL_BIN))"
