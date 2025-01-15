@@ -150,6 +150,9 @@ _save_context:
   sd   s0, OFFSET_REG_DRETURNPC(sp)
   csrr s0, CSR_DFZRETURN
   sd   s0, OFFSET_REG_DFZRETURN(sp)
+  csrr s0, CSR_DFREASON
+  sd   s0, OFFSET_REG_DFREASON(sp)
+
 
   csrr s0, CSR_DJBOUND0LO
   sd   s0, OFFSET_REG_DJBOUND0LO(sp)
@@ -300,6 +303,9 @@ _save_context:
   csrw CSR_DRETURNPC, s0
   ld   s0, OFFSET_REG_DFZRETURN(sp)
   csrw CSR_DFZRETURN, s0
+  ld   s0, OFFSET_REG_DFREASON(sp)
+  csrw CSR_DFREASON, s0
+
 
   ld   s0, OFFSET_REG_DJBOUND0LO(sp)
   csrw CSR_DJBOUND0LO, s0

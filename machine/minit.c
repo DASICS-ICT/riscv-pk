@@ -44,12 +44,13 @@ static void mstatus_init()
 }
 
 // send S-mode interrupts and most exceptions straight to S-mode
+// send S-mode interrupts and most exceptions straight to S-mode
 static void delegate_traps()
 {
   if (!supports_extension('S'))
     return;
 
-  uintptr_t interrupts = MIP_SSIP | MIP_STIP | MIP_SEIP;
+  uintptr_t interrupts = MIP_SSIP | MIP_STIP | MIP_SEIP | MIP_UEIP;
   uintptr_t exceptions =
     (1U << CAUSE_MISALIGNED_FETCH) |
     (1U << CAUSE_FETCH_PAGE_FAULT) |
@@ -57,15 +58,9 @@ static void delegate_traps()
     (1U << CAUSE_LOAD_PAGE_FAULT) |
     (1U << CAUSE_STORE_PAGE_FAULT) |
     (1U << CAUSE_USER_ECALL) |
-    /* dasics exceptions */
-    (1U << CAUSE_DASICS_UINSTR_FAULT) |
-    (1U << CAUSE_DASICS_SINSTR_FAULT) |
-    (1U << CAUSE_DASICS_ULOAD_FAULT) |
-    (1U << CAUSE_DASICS_SLOAD_FAULT) |
-    (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_SSTORE_FAULT) |
-    (1U << CAUSE_DASICS_UECALL_FAULT) |
-    (1U << CAUSE_DASICS_SECALL_FAULT);
+     /* dasics exceptions */
+    (1U << CAUSE_DASICS_UCHECK_FAULT) |
+    (1U << CAUSE_DASICS_SCHECK_FAULT);
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
@@ -75,12 +70,12 @@ static void delegate_traps()
   if(!supports_extension('N'))
 	  return;
 
+  uintptr_t uinterrupts = SIP_UEIP;
   uintptr_t uexceptions = 
-    (1U << CAUSE_DASICS_UINSTR_FAULT) |
-    (1U << CAUSE_DASICS_ULOAD_FAULT)  |
-    (1U << CAUSE_DASICS_USTORE_FAULT) |
-    (1U << CAUSE_DASICS_UECALL_FAULT);
+    (1U << CAUSE_DASICS_UCHECK_FAULT);
+  write_csr(sideleg, uinterrupts);
   write_csr(sedeleg, uexceptions);
+  assert(read_csr(sideleg) == uinterrupts);
   assert(read_csr(sedeleg) == uexceptions);
 }
 

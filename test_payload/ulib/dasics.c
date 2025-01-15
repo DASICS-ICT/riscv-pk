@@ -15,7 +15,7 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
     // Save some registers that should be saved by callees
     uint64_t dasics_return_pc = read_csr(0x8b1);            // DasicsReturnPC
     uint64_t dasics_free_zone_return_pc = read_csr(0x8b2);  // DasicsFreeZoneReturnPC
-
+    uint64_t dasics_fault_reason = read_csr(0x8b3);  // DasicsFaultReason
 
     uint64_t ustatus = read_csr(ustatus);
     uint64_t ucause = read_csr(ucause);
@@ -27,16 +27,16 @@ void ATTR_UMAIN_TEXT dasics_ufault_entry(void) {
 //     printf("Info: ready to shutdown the program due to ufault ...\n");
 //     sys_exit();
 // #else
-    switch (ucause)
+    switch (dasics_fault_reason)
     {
-        case EXCC_DASICS_UINSTR_FAULT:
+        case DasicsJumpFault:
             //const char* message_1 = "[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n";          
             main_printf("[HANDLE_U_DASICS]: Detect UInst Access Fault! Skip this instruction!\n", &printf);
             break;
-        case EXCC_DASICS_ULOAD_FAULT:
+        case DasicsLoadFault:
             main_printf("[HANDLE_U_DASICS]: Detect ULoad Access Fault! Skip this instruction!\n", &printf);
             break;
-        case EXCC_DASICS_USTORE_FAULT:
+        case DasicsStoreFault:
             main_printf("[HANDLE_U_DASICS]: Detect UStore Access Fault! Skip this instruction!\n", &printf);
             break;
         default:

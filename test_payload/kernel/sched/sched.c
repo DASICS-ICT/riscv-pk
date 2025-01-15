@@ -123,7 +123,7 @@ static void init_pcb_stack(
 
     // Set DASICS registers for user program
     extern char _ftext, _etext;
-    pt_regs->dasicsUMainCfg = 0x2UL;
+    pt_regs->dasicsUMainCfg = 0x6UL; // close uecall fault because it it not supported
     pt_regs->dasicsUMainBoundLo = (ptr_t) &_ftext;
     pt_regs->dasicsUMainBoundHi = (ptr_t) &_etext;
 

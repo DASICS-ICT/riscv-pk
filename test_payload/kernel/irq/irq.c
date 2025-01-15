@@ -47,10 +47,7 @@ void handle_int(regs_context_t *regs, uint64_t interrupt, uint64_t cause)
 void delegate_dasics()
 {
     uint64_t exceptions =
-        (1U << CAUSE_DASICS_UINSTR_FAULT) |
-        (1U << CAUSE_DASICS_ULOAD_FAULT) |
-        (1U << CAUSE_DASICS_USTORE_FAULT) |
-        (1U << CAUSE_DASICS_UECALL_FAULT);
+        (1U << CAUSE_DASICS_UCHECK_FAULT);
     write_csr(sedeleg, exceptions);
     assert(read_csr(sedeleg) == exceptions);
 }
@@ -65,9 +62,7 @@ void init_exception()
     }
     irq_table[IRQC_S_TIMER] = handle_int;
     exc_table[EXCC_SYSCALL] = handle_syscall;
-    exc_table[EXCC_DASICS_SINSTR_FAULT] = handle_dasics;
-    exc_table[EXCC_DASICS_SLOAD_FAULT] = handle_dasics;
-    exc_table[EXCC_DASICS_SSTORE_FAULT] = handle_dasics;
+    exc_table[EXCC_DASICS_SCHECK_FAULT] = handle_dasics;
     delegate_dasics();
     setup_exception();
 }
@@ -75,21 +70,24 @@ void init_exception()
 
 void handle_dasics(regs_context_t *regs, uint64_t stval, uint64_t cause)
 {
-    switch (cause)
+    switch (regs->dasicsFaultReason)
     {
-        case EXCC_DASICS_SINSTR_FAULT:
+        case DasicsJumpFault:
             printk("[HANDLE_S_DASICS]: Detect SInst Access Fault! Skip this instruction!\n");
             break;
-        case EXCC_DASICS_SLOAD_FAULT:
+        case DasicsLoadFault:
             printk("[HANDLE_S_DASICS]: Detect SLoad Access Fault! Skip this instruction!\n");
             break;
-        case EXCC_DASICS_SSTORE_FAULT:
+        case DasicsStoreFault:
             printk("[HANDLE_S_DASICS]: Detect SStore Access Fault! Skip this instruction!\n");
+            break;
+        case DasicsEcallFault:
+            printk("[HANDLE_S_DASICS]: Detect SEcall Access Fault! Skip this instruction!\n");
             break;
         default:
             printk("[HANDLE_S_DASICS]: Invalid cause 0x%lx detected!\n");
-            printk("sstatus: 0x%lx sbadaddr: 0x%lx scause: %lu\n\r",
-                regs->sstatus, regs->sbadaddr, regs->scause);
+            printk("sstatus: 0x%lx sbadaddr: 0x%lx scause: %lu\n\r dfreason: %lu\n\r",
+                regs->sstatus, regs->sbadaddr, regs->scause, regs->dasicsFaultReason);
             printk("sepc: 0x%lx\n\r", regs->sepc);
             sbi_shutdown();
             break;

@@ -15,6 +15,11 @@
 #define DASICS_JUMPCFG_MASK 0xffffUL
 #define DASICS_JUMPCFG_V    0x1UL
 
+#define DasicsEcallFault 1
+#define DasicsLoadFault  2
+#define DasicsStoreFault 3
+#define DasicsJumpFault  4
+
 typedef enum {
     SMAINCALL_DISABLE_PREEMPT,
     SMAINCALL_ENABLE_PREEMPT,

@@ -28,13 +28,12 @@ typedef enum {
     UMAINCALL_PRINTF
 } UmaincallTypes;
 
-enum ExcCode
-{
-    EXCC_DASICS_UINSTR_FAULT = 24,
-    EXCC_DASICS_ULOAD_FAULT = 26,
-    EXCC_DASICS_USTORE_FAULT = 28,
-    EXCC_DASICS_UECALL_FAULT = 30,
-};
+#define DasicsEcallFault 1
+#define DasicsLoadFault  2
+#define DasicsStoreFault 3
+#define DasicsJumpFault  4
+
+#define EXCC_DASICS_UCHECK_FAULT 24
 
 void     ATTR_UMAIN_TEXT dasics_init_umaincall(uint64_t entry);
 uint64_t ATTR_UMAIN_TEXT dasics_umaincall(UmaincallTypes type, uint64_t arg0, uint64_t arg1, uint64_t arg2);

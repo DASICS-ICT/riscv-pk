@@ -69,6 +69,7 @@ typedef struct regs_context
     reg_t dasicsMaincall;
     reg_t dasicsReturnPC;
     reg_t dasicsFreezoneRet;
+    reg_t dasicsFaultReason;
     reg_t dasicsJumpBounds[4][2];
     reg_t dasicsJumpCfg;
 } regs_context_t;
