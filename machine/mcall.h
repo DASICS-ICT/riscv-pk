@@ -16,4 +16,6 @@
 // DASICS SBI CALL
 #define SBI_MODIFY_SMAIN_BOUND 13
 
+#define SBI_PLIC_EOI 9
+
 #endif

@@ -34,6 +34,7 @@ DTB = $(BBL_BUILD_PATH)/system.dtb
 
 ifeq ($(BOARD),s2c19p)
 DTS = dts/system-s2c19p.dts
+BBL_ENV = CFLAGS=-DS2C
 else 
 	ifeq ($(BOARD),nexst)
 	DTS = dts/system-nexst.dts
@@ -102,6 +103,7 @@ $(LINUX_ELF): | $(LINUX_REPO_PATH) $(ROOTFS_PATH)
 	mkdir -p $(BBL_BUILD_PATH)
 	$(RFS_ENV) $(MAKE) -C $(ROOTFS_PATH)
 	$(RFS_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv vmlinux
+	mkdir -p $(BBL_BUILD_PATH)
 	$(RISCV_DUMP) -d $(LINUX_ELF) > $(BBL_BUILD_PATH)/vmlinux.txt
 
 linux-clean:

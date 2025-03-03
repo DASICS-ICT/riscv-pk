@@ -321,9 +321,11 @@ static void clint_prop(const struct fdt_scan_prop *prop, void *extra)
 {
   struct clint_scan *scan = (struct clint_scan *)extra;
   if (!strcmp(prop->name, "compatible") && fdt_string_list_index(prop, "riscv,clint0") >= 0) {
+    printm("found clint\n");
     scan->compat = 1;
   } else if (!strcmp(prop->name, "reg")) {
     fdt_get_address(prop->node->parent, prop->value, &scan->reg);
+    printm("clint addr = %x\n", scan->reg);
   } else if (!strcmp(prop->name, "interrupts-extended")) {
     scan->int_value = prop->value;
     scan->int_len = prop->len;
@@ -356,6 +358,7 @@ static void clint_done(const struct fdt_scan_node *node, void *extra)
     if (hart < MAX_HARTS) {
       hls_t *hls = OTHER_HLS(hart);
       hls->ipi = (void*)((uintptr_t)scan->reg + index * 4);
+      printm("[DEBUG] hls->ipi %p\n", hls->ipi);
       hls->timecmp = (void*)((uintptr_t)scan->reg + 0x4000 + (index * 8));
     }
     value += 4;
@@ -416,6 +419,9 @@ static void plic_prop(const struct fdt_scan_prop *prop, void *extra)
     scan->int_len = prop->len;
   } else if (!strcmp(prop->name, "riscv,ndev")) {
     scan->ndev = bswap(prop->value[0]);
+    if (scan->compat) {
+      printm("riscv,ndev %d\n", scan->ndev);
+    }
   }
 }
 

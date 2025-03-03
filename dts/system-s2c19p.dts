@@ -94,9 +94,9 @@
             riscv,ndev = <64>;
         };
 
-       serial@310B0000 {
+       serial@310b0000 {
            compatible = "ns16550a";
-           reg = <0x0 0x310B0000 0x0 0x10000>;
+           reg = <0x0 0x310b0000 0x0 0x10000>;
            reg-shift = <0x02>;
            reg-io-width = <0x04>;
            interrupt-parent = <&PLIC>;
@@ -108,7 +108,7 @@
 
     chosen {
          bootargs = "root=/dev/nvme0n1p2 rootfstype=ext4 rw rootwait console=ttyS0,115200n8 earlycon noinitrd";
-         stdout-path = "/soc/serial@310B0000";
+         stdout-path = "/soc/serial@310b0000";
     };
 
     memory: memory@100000000 {
