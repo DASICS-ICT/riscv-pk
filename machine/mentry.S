@@ -293,7 +293,7 @@ copy_and_run :
   csrr a0, mhartid
   jal printInfo
   jal copyAndRun
-#endif
+
   .globl _run
 _run:
   csrr a0, mhartid
@@ -304,6 +304,11 @@ _run:
   # reset the other core
   la x1, 0x39001008
   STORE x2, 0(x1)
+#else 
+  .globl _run
+_run:
+  csrw mscratch, x0
+#endif
 
   # write mtvec and make sure it sticks
   la t0, trap_vector

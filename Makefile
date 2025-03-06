@@ -33,8 +33,8 @@ BBL_CONFIG = --host=riscv64-unknown-elf \
 DTB = $(BBL_BUILD_PATH)/system.dtb
 
 ifeq ($(BOARD),s2c19p)
-DTS = dts/system-s2c19p.dts
-BBL_ENV = CFLAGS=-DS2C
+	DTS = dts/system-s2c19p.dts
+	BBL_ENV = CFLAGS=-DS2C
 else 
 	ifeq ($(BOARD),nexst)
 	DTS = dts/system-nexst.dts

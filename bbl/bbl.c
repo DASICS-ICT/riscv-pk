@@ -108,9 +108,7 @@ void boot_other_hart(uintptr_t unused __attribute__((unused)))
 #ifdef BBL_BOOT_MACHINE
   enter_machine_mode(entry, hartid, dtb_output());
 #else /* Run bbl in supervisor mode */
-#ifndef S2C
-  protect_memory();
-#endif
+  // protect_memory();
   flush_tlb();
   enter_supervisor_mode(entry, hartid, dtb_output());
 #endif
