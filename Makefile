@@ -9,7 +9,7 @@ RISCV_COPY = $(RISCV_PREFIX)objcopy
 RISCV_DUMP = $(RISCV_PREFIX)objdump
 RISCV_COPY_FLAGS = --set-section-flags .bss=alloc,contents --set-section-flags .sbss=alloc,contents -O binary
 
-BOARD ?= sim # sim / nexst / s2c19p
+BOARD ?= emu # emu / nexst / envscripts / zynq
 
 #--------------------------------------------------------------------
 # BBL variables
@@ -32,15 +32,15 @@ BBL_CONFIG = --host=riscv64-unknown-elf \
 
 DTB = $(BBL_BUILD_PATH)/system.dtb
 
-ifeq ($(BOARD),s2c19p)
-	DTS = dts/system-s2c19p.dts
+ifeq ($(BOARD),envscripts)
+	DTS = dts/system-envscripts.dts
 	BBL_ENV = CFLAGS=-DS2C
-else 
-	ifeq ($(BOARD),nexst)
+else ifeq ($(BOARD),nexst)
 	DTS = dts/system-nexst.dts
-	else 
-	DTS = dts/system-origin.dts
-	endif
+else ifeq ($(BOARD),zynq)
+	DTS = dts/system-zynq.dts
+else ifeq ($(BOARD),emu)
+	DTS = dts/system-emu.dts
 endif
 
 ifeq ($(MAKECMDGOALS),qemu)
