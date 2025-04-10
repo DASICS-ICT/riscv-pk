@@ -100,7 +100,7 @@
 			reg-names = "control";
 		};
 		uart0: serial@30000000 {
-			compatible = "xlnx,opb-uartlite-1.00.b";
+			compatible = "xlnx,opb-uartlite-1.00.b","xilinx,uartlite";
 			reg = <0x0 0x30000000 0x0 0x10000>;
 			port-number = <0>;
 			current-speed = <115200>;
