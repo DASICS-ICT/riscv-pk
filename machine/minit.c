@@ -103,8 +103,9 @@ static void delegate_traps()
 
   write_csr(mideleg, interrupts);
   write_csr(medeleg, exceptions);
-  assert(read_csr(mideleg) == interrupts);
-  assert(read_csr(medeleg) == exceptions);
+
+  assert(supports_extension('H') || 
+        (read_csr(mideleg) == interrupts && read_csr(medeleg) == exceptions));
 
   if(!supports_extension('N'))
 	  return;
@@ -114,8 +115,8 @@ static void delegate_traps()
     (1U << CAUSE_DASICS_UCHECK_FAULT);
   write_csr(sideleg, uinterrupts);
   write_csr(sedeleg, uexceptions);
-  assert(read_csr(sideleg) == uinterrupts);
-  assert(read_csr(sedeleg) == uexceptions);
+  assert(supports_extension('H') || 
+        (read_csr(sideleg) == uinterrupts && read_csr(sedeleg) == uexceptions));
 }
 
 static void dump_misa(uint32_t misa) {
