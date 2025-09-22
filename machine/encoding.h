@@ -112,6 +112,7 @@
 #define SIP_STIP MIP_STIP
 
 #define SIP_UEIP MIP_UEIP
+#define SIP_UTIP MIP_UTIP
 
 #define PRV_U 0
 #define PRV_S 1
